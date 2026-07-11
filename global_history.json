@@ -6,10 +6,10 @@
         "email": "merchavido@gmail.com",
         "password": "181Ido2013",
         "avatarTextColor": "black",
-        "is_selected": false,
+        "is_selected": true,
         "custom_username": "ido",
         "exmail": "ido@extra-tag.com",
-        "is_logged_in": false,
+        "is_logged_in": true,
         "files": [
             {
                 "file_name": "רימון-רישמת-ספרים-ח.pdf",
@@ -57,13 +57,13 @@
         "password": "1234",
         "confirmPassword": "1234",
         "id": "fffd5480-25ea-40d6-9008-7de89051271c",
-        "is_selected": true,
+        "is_selected": false,
         "avatarColor": "#f43f5e",
         "avatarShape": "circle",
         "avatarTextColor": "black",
         "custom_username": "roye_cohen",
         "exmail": "roye_cohen@extra-tag.com",
-        "is_logged_in": true,
+        "is_logged_in": false,
         "files": [
             {
                 "file_name": "MEGA-RECOVERYKEY.txt",
