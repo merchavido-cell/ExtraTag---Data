@@ -94,13 +94,17 @@
         "files": []
     },
     {
+        "id": "eb96b29a-0604-460d-ac72-e55fde7afc2c",
         "firstName": "dana",
         "lastName": "berkovich",
         "email": "bdana@gmail.com",
         "password": "dana10",
-        "confirmPassword": "dana10",
-        "id": "eb96b29a-0604-460d-ac72-e55fde7afc2c",
         "is_logged_in": true,
-        "is_selected": true
+        "is_selected": true,
+        "avatarColor": "#8b5cf6",
+        "avatarShape": "square",
+        "avatarTextColor": null,
+        "custom_username": null,
+        "exmail": null
     }
 ]
