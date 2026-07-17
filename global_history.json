@@ -1,2 +1,12 @@
 [
+    {
+        "firstName": "ido",
+        "lastName": "merchav",
+        "email": "merchavido@gmail.com",
+        "password": "181Ido2013",
+        "confirmPassword": "181Ido2013",
+        "id": "ca7ee9b3-c5ff-4405-8cd6-e2c0da8124d2",
+        "is_logged_in": true,
+        "is_selected": true
+    }
 ]
