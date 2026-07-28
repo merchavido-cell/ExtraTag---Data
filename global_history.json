@@ -26,6 +26,11 @@
         "email": "merchavido@outlook.co.il",
         "password": "21",
         "confirmPassword": "21",
-        "id": "f02df847-fa4f-4b56-9ef8-23a4d060dc73"
+        "id": "f02df847-fa4f-4b56-9ef8-23a4d060dc73",
+        "avatarColor": null,
+        "avatarShape": null,
+        "avatarTextColor": "black",
+        "custom_username": null,
+        "exmail": null
     }
 ]
