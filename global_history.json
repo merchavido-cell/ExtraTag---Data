@@ -19,18 +19,6 @@
         "avatarColor": "#10b981",
         "avatarShape": "square",
         "avatarTextColor": "black"
-    },
-    {
-        "firstName": "stefan",
-        "lastName": "pogresive",
-        "email": "merchavido@outlook.co.il",
-        "password": "21",
-        "confirmPassword": "21",
-        "id": "f02df847-fa4f-4b56-9ef8-23a4d060dc73",
-        "avatarColor": "#38bdf8",
-        "avatarShape": "circle",
-        "avatarTextColor": "black",
-        "custom_username": null,
-        "exmail": null
     }
+    
 ]
