@@ -1,1 +1,10 @@
-[]
+[
+    {
+        "firstName": "ido",
+        "lastName": "merchav",
+        "email": "merchavido@gmail.com",
+        "password": "181Ido2013",
+        "confirmPassword": "181Ido2013",
+        "id": "5e00ee16-cab4-457f-a85d-a45dfc2ac7a5"
+    }
+]
