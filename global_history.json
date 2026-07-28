@@ -5,6 +5,10 @@
         "email": "merchavido@gmail.com",
         "password": "181Ido2013",
         "confirmPassword": "181Ido2013",
-        "id": "5e00ee16-cab4-457f-a85d-a45dfc2ac7a5"
+        "id": "5e00ee16-cab4-457f-a85d-a45dfc2ac7a5",
+        "exmail": "merchavido@extra-tag.com",
+        "expass": "P@ssword123!",
+        "custom_username": "merchavido",
+        "files": []
     }
 ]
