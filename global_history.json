@@ -29,5 +29,13 @@
         "avatarColor": "#38bdf8",
         "avatarShape": "square",
         "avatarTextColor": "black"
+    },
+    {
+        "firstName": "david",
+        "lastName": "weizman",
+        "email": "eyal.merchav@gmail.com",
+        "password": "1234",
+        "confirmPassword": "1234",
+        "id": "299e72df-f221-49b4-a74d-fb252c76f7f0"
     }
 ]
