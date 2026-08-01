@@ -36,6 +36,11 @@
         "email": "eyal.merchav@gmail.com",
         "password": "1234",
         "confirmPassword": "1234",
-        "id": "299e72df-f221-49b4-a74d-fb252c76f7f0"
+        "id": "299e72df-f221-49b4-a74d-fb252c76f7f0",
+        "avatarColor": "#f43f5e",
+        "avatarShape": "circle",
+        "avatarTextColor": null,
+        "custom_username": null,
+        "exmail": null
     }
 ]
