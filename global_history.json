@@ -36,6 +36,11 @@
         "email": "os100435@gmail.com",
         "password": "os21102013",
         "confirmPassword": "os21102013",
-        "id": "a412955a-23fb-44b7-8e81-6c69f778b512"
+        "id": "a412955a-23fb-44b7-8e81-6c69f778b512",
+        "avatarColor": "#38bdf8",
+        "avatarShape": "square",
+        "avatarTextColor": null,
+        "custom_username": null,
+        "exmail": null
     }
 ]
