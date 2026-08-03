@@ -55,6 +55,9 @@
         "exmail": "eyal-pro@extra-tag.com",
         "expass": "P@ssword123!",
         "custom_username": "eyal-pro",
-        "files": []
+        "files": [],
+        "avatarColor": "#f59e0b",
+        "avatarShape": "circle",
+        "avatarTextColor": null
     }
 ]
