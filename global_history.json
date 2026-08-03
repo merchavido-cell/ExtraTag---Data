@@ -44,5 +44,13 @@
         "exmail": "os1004355@extra-tag.com",
         "expass": "P@ssword123!",
         "files": []
+    },
+    {
+        "firstName": "eyal",
+        "lastName": "merchav",
+        "email": "eyal.merchav@gmail.com",
+        "password": "eyal1967",
+        "confirmPassword": "eyal1967",
+        "id": "f4240519-2587-4e7d-80fc-e3cb0f6e817f"
     }
 ]
