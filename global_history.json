@@ -51,6 +51,10 @@
         "email": "eyal.merchav@gmail.com",
         "password": "eyal1967",
         "confirmPassword": "eyal1967",
-        "id": "f4240519-2587-4e7d-80fc-e3cb0f6e817f"
+        "id": "f4240519-2587-4e7d-80fc-e3cb0f6e817f",
+        "exmail": "eyal-pro@extra-tag.com",
+        "expass": "P@ssword123!",
+        "custom_username": "eyal-pro",
+        "files": []
     }
 ]
