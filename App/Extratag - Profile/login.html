@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>ExtraTag - Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        .box {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            width: 420px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: none;
+            box-sizing: border-box;
+            background: #ffffff;
+            color: #000000;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background: #38bdf8;
+            border: none;
+            border-radius: 6px;
+            color: #0f172a;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover { background: #0ea5e9; }
+        .error { border: 2px solid #ef4444 !important; }
+
+        /* עיצוב כפתור החזרה בצד ימין למטה */
+        .btn-back {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #f8fafc; /* צבע הרקע כמו צבע הטקסט הראשי */
+            color: #0f172a;            /* טקסט כהה לניגודיות קריאה */
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;       /* מראה מלבני מעודן */
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            width: auto;              /* מניעת דריסה של CSS הכפתור הכללי */
+            margin-top: 0;
+        }
+        .btn-back:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2 style="margin-top:0; text-align:center; color:#38bdf8;">Login to ExtraTag</h2>
+        <input type="text" id="emailInput" placeholder="Email or Exmail">
+        <input type="password" id="passwordInput" placeholder="Password">
+        <button onclick="performLogin()">Login</button>
+    </div>
+
+    <!-- כפתור חזרה בצד ימין למטה -->
+    <button class="btn-back" onclick="goBack()">Back</button>
+
+    <script>
+async function performLogin() {
+    let emailInput = document.getElementById("emailInput");
+    let passwordInput = document.getElementById("passwordInput");
+
+    emailInput.classList.remove("error");
+    passwordInput.classList.remove("error");
+
+    let emailOrExmail = emailInput.value.trim();
+    let password = passwordInput.value.trim();
+
+    let isValid = true;
+
+    if (emailOrExmail === "") {
+        emailInput.classList.add("error");
+        isValid = false;
+    }
+
+    if (password === "") {
+        passwordInput.classList.add("error");
+        isValid = false;
+    }
+
+    if (!isValid) {
+        alert("Please fill in all fields!");
+        return;
+    }
+
+    if (window.pywebview && window.pywebview.api) {
+        try {
+            let result = await window.pywebview.api.login_from_global_history(emailOrExmail, password);
+
+            if (result.success) {
+                // ⭐ מעבר לדף הבית אחרי התחברות מוצלחת
+                window.pywebview.api.navigate_to('home.html', 'Extratag - Profile');
+            } else {
+                emailInput.classList.add("error");
+                passwordInput.classList.add("error");
+                alert(result.message || "Invalid email or password");
+            }
+        } catch (err) {
+            console.error("Login error:", err);
+        }
+    }
+}
+
+// פונקציית חזרה לדף Acounts.html
+function goBack() {
+    if (window.pywebview && window.pywebview.api) {
+        window.pywebview.api.navigate_to("Acounts.html", "Extratag - Profile");
+    }
+}
+</script>
+
+</body>
+</html>

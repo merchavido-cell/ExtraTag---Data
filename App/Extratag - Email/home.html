@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>ExtraTag Mail</title>
+<style>
+*{box-sizing:border-box;}
+body{
+margin:0;
+padding:0;
+background:#f8fafc;
+font-family:'Segoe UI',Arial,sans-serif;
+height:100vh;
+}
+.avatar-top-left{
+position:absolute;
+top:20px;
+left:20px;
+z-index:20;
+}
+.avatar-circle{
+width:45px;
+height:45px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+font-size:22px;
+}
+.avatar-square{
+width:45px;
+height:45px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+font-size:22px;
+}
+.logo-container{
+position:absolute;
+top:12px;
+right:20px;
+width:220px;
+}
+.logo-container img{width:100%;}
+.sidebar-menu{
+position:absolute;
+top:100px;
+left:20px;
+width:260px;
+}
+.menu-item{
+height:50px;
+background:linear-gradient(135deg,#ff7e40,#ff5100);
+border-radius:6px;
+margin-bottom:12px;
+color:white;
+text-align:center;
+line-height:50px;
+font-weight:bold;
+cursor:pointer;
+user-select:none;
+}
+.menu-item.active {
+background: linear-gradient(135deg, #e04800, #c43e00);
+box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+.main-content{
+position:absolute;
+top:100px;
+left:300px;
+right:20px;
+bottom:20px;
+background:white;
+border-radius:8px;
+padding:25px;
+overflow:auto;
+}
+.title{
+font-size:24px;
+color:#334155;
+}
+.mail-box{
+display:flex;
+gap:20px;
+height:80%;
+}
+.inbox{
+width:45%;
+border:1px solid #e2e8f0;
+border-radius:10px;
+padding:15px;
+overflow:auto;
+}
+.compose{
+width:55%;
+border:1px solid #e2e8f0;
+border-radius:10px;
+padding:15px;
+}
+.mail{
+background:#f8fafc;
+border:1px solid #e2e8f0;
+padding:12px;
+border-radius:8px;
+margin-bottom:10px;
+}
+input, textarea{
+width:100%;
+padding:10px;
+margin-bottom:10px;
+border-radius:8px;
+border:1px solid #cbd5e1;
+}
+textarea{
+height:180px;
+resize:none;
+}
+button{
+padding:12px 25px;
+background:#ff5100;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div id="avatar" class="avatar-top-left" onclick="window.pywebview.api.navigate_to('home.html', 'Extratag - Profile')"></div>
+<div class="logo-container">
+<img src="ExtraTag Email.png">
+</div>
+
+<div class="sidebar-menu">
+<div class="menu-item active" id="btn-inbox" onclick="switchFolder('inbox')">Inbox</div>
+<div class="menu-item" id="btn-sent" onclick="switchFolder('sent')">Sent</div>
+<br><br><br><br><br>
+<div class="menu-item" style="background:linear-gradient(135deg,#ef4444,#b91c1c)" onclick="logout()">
+Logout
+</div>
+</div>
+
+<div class="main-content">
+<h1 class="title" id="welcome">ExtraTag Mail</h1>
+<div class="mail-box">
+<div class="inbox">
+<h2 id="folder-title">Inbox</h2>
+<div id="mail-list">Loading...</div>
+</div>
+<div class="compose">
+<h2>New Message</h2>
+<input id="receiver" placeholder="To: user@domain">
+<input id="subject" placeholder="Subject">
+<textarea id="message" placeholder="Write message..."></textarea>
+<button onclick="sendMail()">Send</button>
+</div>
+</div>
+</div>
+
+<script>
+let isLoadingInbox = false;
+let currentFolder = 'inbox'; // מעקב אחר התיקייה הפעילה
+
+// פונקציית עזר לחילוץ אחיד ובטוח של הפרופיל
+async function getActiveProfileSafe() {
+    try {
+        let raw = await window.pywebview.api.get_active_profile();
+        let response = typeof raw === "string" ? JSON.parse(raw || "{}") : raw;
+        return (response.success && response.profile) ? response.profile : response;
+    } catch (e) {
+        console.error("Error fetching active profile:", e);
+        return {};
+    }
+}
+
+async function logout(){
+    try {  
+        let raw = await window.pywebview.api.get_active_profile();
+        let res = typeof raw === 'string' ? JSON.parse(raw || "{}") : raw;
+        let profile = (res && res.profile) ? res.profile : res;
+
+        if(profile && profile.email){
+            await window.pywebview.api.logout_by_email(profile.email);
+        }
+
+        sessionStorage.clear();
+        setTimeout(() => {
+            window.pywebview.api.navigate_to("Fastin.html", "Extratag - Email");
+        }, 1);
+    } catch(e) {
+        console.error(e);
+        setTimeout(() => {
+            window.pywebview.api.navigate_to("Fastin.html", "Extratag - Email");
+        }, 1);
+    }
+}
+
+async function loadUser(){
+    try {
+        let profile = await getActiveProfileSafe();
+        let targetEmail = profile.exmail || profile.email || profile.Email;
+
+        if(!targetEmail){
+            document.getElementById("welcome").innerText = "No active user";
+            return;
+        }
+
+        document.getElementById("welcome").innerText = "ExtraTag Mail - " + targetEmail;
+        if(profile.avatarShape==="circle"){
+            document.getElementById("avatar").innerHTML =
+        `<div class="avatar-circle" style="background:${profile.avatarColor || '#38bdf8'};color:${profile.avatarTextColor || '#fff'}">
+        ${(profile.firstName?.[0] || "?").toUpperCase()}
+        </div>`;
+        } if(profile.avatarShape==="square"){
+            document.getElementById("avatar").innerHTML =
+        `<div class="avatar-square" style="background:${profile.avatarColor || '#38bdf8'};color:${profile.avatarTextColor || '#fff'}">
+        ${(profile.firstName?.[0] || "?").toUpperCase()}
+        </div>`;
+        }
+        
+    }
+    catch(e){
+        console.log("loadUser error:", e);
+    }
+}
+
+async function sendMail(){
+    try {
+        let profile = await getActiveProfileSafe();
+        
+        let receiver = document.getElementById("receiver").value;
+        let subject = document.getElementById("subject").value;
+        let message = document.getElementById("message").value;
+
+        if(!receiver || !message){
+            alert("Fill all fields");
+            return;
+        }
+
+        let senderEmail = profile.exmail || profile.email || profile.Email;
+        let mailPassword = profile.expass || profile.password; 
+
+        // שליחת הפרמטרים לפייתון (אם פייתון דורש סיסמה - תוכל להוסיף את mailPassword בסוף)
+        let result = await window.pywebview.api.send_email(
+            senderEmail,
+            receiver,
+            subject,
+            message
+        );
+
+        if(typeof result === "string"){
+            result = JSON.parse(result);
+        }
+
+        if(result && result.success){
+            
+            // ניקוי הטופס
+            document.getElementById("receiver").value = "";
+            document.getElementById("subject").value = "";
+            document.getElementById("message").value = "";
+            
+            // אם המשתמש נמצא בתיקיית Sent, נרענן מיד בלחיצה
+            if(currentFolder === 'sent'){
+                loadInbox();
+            }
+        } else {
+            alert("SMTP ERROR:\n" + (result.message || "Unknown error occurred"));
+        }
+    }
+    catch(e){
+        alert("SEND ERROR:\n"+e);
+    }
+}
+
+function linkify(text) {
+    if (!text) return "";
+    const urlPattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    return text.replace(urlPattern, function(url) {
+        return `<a href="#" onclick="openExternalUrl('${url}'); return false;" style="color: #ff5100; text-decoration: underline; font-weight: bold;">${url}</a>`;
+    });
+}
+
+function openExternalUrl(url) {
+    if (window.pywebview && window.pywebview.api && window.pywebview.api.open_url) {
+        window.pywebview.api.open_url(url);
+    } else {
+        window.open(url, '_blank');
+    }
+}
+
+function openAttachment(fileUrl, fileName) {
+    if (window.pywebview && window.pywebview.api && window.pywebview.api.open_attachment) {
+        window.pywebview.api.open_attachment(fileUrl, fileName);
+    } else {
+    }
+}
+
+// מעבר בטוח בין התיקיות וטעינת נתונים אמיתיים
+async function switchFolder(folderName) {
+    if (currentFolder === folderName && !isLoadingInbox) return;
+    
+    currentFolder = folderName;
+    
+    // עדכון העיצוב של הכפתור הנבחר בסרגל
+    ['inbox', 'sent'].forEach(f => {
+        let btn = document.getElementById('btn-' + f);
+        if(btn) {
+            if(f === folderName) btn.classList.add('active');
+            else btn.classList.remove('active');
+        }
+    });
+
+    // עדכון כותרת התיקייה
+    document.getElementById("folder-title").innerText = folderName.charAt(0).toUpperCase() + folderName.slice(1);
+    document.getElementById("mail-list").innerHTML = "<div style='color: #64748b;'>Loading " + folderName + "...</div>";
+
+    // טעינת הנתונים מהשרת
+    await loadInbox();
+}
+
+async function loadInbox(){
+    if(isLoadingInbox) return;
+    isLoadingInbox = true;
+
+    try {
+        let profile = await getActiveProfileSafe();
+        let targetEmail = profile.exmail || profile.email || profile.Email;
+
+        if(!targetEmail){
+            isLoadingInbox = false;
+            return;
+        }
+
+        let box = document.getElementById("mail-list");
+        let result;
+
+        // --- התיקון הגדול נמצא כאן ---
+        if (currentFolder === 'sent') {
+            // קריאה לפונקציית Sent המקומית ב-Python (מביא מיד 0 שניות טעינה)
+            let sentRaw = await window.pywebview.api.get_sent_emails(targetEmail);
+            result = typeof sentRaw === "string" ? JSON.parse(sentRaw || "{}") : sentRaw;
+        } else {
+            // בשאר התיקיות (Inbox וכו') מושכים משרת ה-IMAP
+            let mailsRaw = await window.pywebview.api.get_exmail(targetEmail);
+            result = typeof mailsRaw === "string" ? JSON.parse(mailsRaw || "{}") : mailsRaw;
+        }
+        // ------------------------------
+
+        if(!result || !result.success || !result.emails || !result.emails.length){
+            box.innerHTML = `<div style="color: #64748b; font-style: italic; padding: 10px;">No messages in ${currentFolder}</div>`;
+            isLoadingInbox = false;
+            return;
+        }
+
+        let newContent = "";
+        result.emails.forEach(mail => {
+            let formattedBody = linkify(mail.body || '');
+
+            let attachmentsHtml = "";
+            if (mail.attachments && mail.attachments.length > 0) {
+                attachmentsHtml = `<div class="attachments-zone" style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed #cbd5e1; direction: rtl; text-align: right;">
+                    <b style="font-size: 13px; color: #64748b;">קבצים מצורפים:</b><br>`;
+                
+                mail.attachments.forEach(file => {
+                    attachmentsHtml += `
+                        <button onclick="openAttachment('${file.url}', '${file.name}')" 
+                                style="padding: 5px 10px; background: #e2e8f0; color: #334155; font-size: 12px; border-radius: 4px; margin-left: 5px; margin-top: 5px; border: 1px solid #cbd5e1; font-weight: normal; cursor: pointer;">
+                            📎 ${file.name}
+                        </button>`;
+                });
+                
+                attachmentsHtml += `</div>`;
+            }
+
+            // הצגת שדה To אם ב-Sent, או From אם ב-Inbox
+            let headerField = (currentFolder === 'sent') 
+                ? `<b>To:</b> ${mail.to || 'Unknown'}` 
+                : `<b>From:</b> ${mail.from || 'Unknown'}`;
+
+            newContent += `
+            <div class="mail">
+                ${headerField}<br>
+                <b>Subject:</b> ${mail.subject || 'No Subject'}<br>
+                ${mail.date ? `<small style="color: #94a3b8;">${mail.date}</small><br>` : ''}<br>
+                <div style="white-space: pre-line; word-break: break-word;">${formattedBody}</div>
+                ${attachmentsHtml}
+            </div>`;
+        });
+
+        if(box.innerHTML !== newContent){
+            box.innerHTML = newContent;
+        }
+
+    } catch(e){
+        console.log("Inbox error:", e);
+    }
+    isLoadingInbox = false;
+}
+
+async function silentRefresh(){
+    let active = document.activeElement;
+    if(active && (active.tagName==="INPUT" || active.tagName==="TEXTAREA")){
+        return; 
+    }
+    await loadInbox();
+}
+
+function init(){
+    loadUser();
+    loadInbox();
+    setInterval(()=>{
+        silentRefresh();
+    }, 5000);
+}
+
+window.addEventListener("pywebviewready", init);
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>ExtraTag - Vcall Loading</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: white; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        #startlogo {
+            position: absolute;
+            width: 220px;
+            height: auto;
+            opacity: 0;
+            transform-origin: center;
+            /* שינוי מהירות האנימציה ל-2.2 שניות לתנועה חלקה ואיטית יותר */
+            transition: opacity 2.2s cubic-bezier(0.25, 1, 0.5, 1), transform 2.2s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translate(-50%, -50%) scale(2.5);
+            left: 50%;
+            top: 50%;
+        }
+
+        #startlogo img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(76, 175, 80, 0.2));
+        }
+
+        /* השינוי המבוקש: הלוגו מופיע במרכז, ואז זז לאט ימינה ולמעלה */
+        #startlogo.move-to-corner {
+            opacity: 1;
+            transform: translate(calc(50vw - 160px), calc(-50vh + 30px)) scale(0.6);
+        }
+    </style>
+</head>
+<body>
+
+<div id="startlogo">
+    <img src="ExtraTag-Vcall.png" alt="ExtraTag Vcall Logo">
+</div>
+
+<script>
+async function openApp() {
+    if (!window.pywebview || !window.pywebview.api) {
+        console.log("pywebview לא מוכן");
+        return;
+    }
+
+    try {
+        let activeProfileRaw = await window.pywebview.api.get_active_profile();
+        let res = JSON.parse(activeProfileRaw);
+        let currentProfile = res.profile;
+
+        if (!currentProfile || currentProfile.is_logged_in !== true) {
+            window.pywebview.api.navigate_to("Fastin.html", "Extratag - Vcall");
+            return;
+        }
+
+        window.pywebview.api.navigate_to('home.html', 'Extratag - Vcall');
+
+    } catch (err) {
+        console.log("שגיאה ב-openApp:", err);
+        window.pywebview.api.navigate_to('home.html', 'Extratag - Vcall');
+    }
+}
+
+window.addEventListener('pywebviewready', function() {
+    let logo = document.getElementById("startlogo");
+    
+    // 1. קודם כל מציגים את הלוגו במרכז (opacity 1) בלי להזיז אותו
+    setTimeout(() => {
+        logo.style.opacity = "1";
+        
+        // 2. מחכים שנייה שלמה (1000ms) כשהוא תקוע במרכז, ורק אז נותנים לו לעוף ימינה למעלה לאט
+        setTimeout(() => {
+            logo.classList.add("move-to-corner");
+            
+            // 3. בגלל שהאנימציה עכשיו לוקחת 2.2 שניות, נמתין שהיא תסתיים לפני הניווט למסך הבא
+            setTimeout(openApp, 1400);
+        }, 1000);
+        
+    }, 200);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ExtraTag - Edit Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+            box-sizing: border-box;
+        }
+        .box {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            width: 420px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #94a3b8;
+            text-align: left;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 4px 0 12px 0;
+            border-radius: 6px;
+            border: none;
+            box-sizing: border-box;
+            background: #ffffff;
+            color: #000000;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #38bdf8;
+            border: none;
+            border-radius: 6px;
+            color: #0f172a;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0ea5e9;
+        }
+        .error {
+            border: 2px solid #ef4444 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2 style="margin-top:0; text-align:center; color:#38bdf8;">Edit Profile</h2>
+        
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName">
+
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName">
+
+        <label for="email">Email</label>
+        <input type="text" id="email">
+
+        <label for="password">Password</label>
+        <input type="password" id="password">
+
+        <button onclick="performUpdate()">Update Profile</button>
+    </div>
+
+    <script>
+    let currentProfile = null;
+
+    window.addEventListener('pywebviewready', async function() {
+        try {
+            currentProfile = await window.pywebview.api.get_active_profile();
+            if (currentProfile && Object.keys(currentProfile).length > 0) {
+                document.getElementById("firstName").value = currentProfile.firstName || "";
+                document.getElementById("lastName").value = currentProfile.lastName || "";
+                document.getElementById("email").value = currentProfile.email || "";
+                document.getElementById("password").value = currentProfile.password || "";
+            }
+        } catch (err) {
+            console.error("Error loading profile:", err);
+        }
+    });
+
+    async function performUpdate() {
+        let fields = ["firstName", "lastName", "email", "password"];
+        fields.forEach(f => document.getElementById(f).classList.remove("error"));
+
+        let isValid = true;
+        let updatedProfile = { ...currentProfile };
+
+        fields.forEach(f => {
+            let val = document.getElementById(f).value.trim();
+            if (!val) {
+                document.getElementById(f).classList.add("error");
+                isValid = false;
+            }
+            updatedProfile[f] = val;
+        });
+
+        if (!isValid) {
+            alert("Please fill all fields!");
+            return;
+        }
+
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(updatedProfile.email)) {
+            document.getElementById("email").classList.add("error");
+            alert("Invalid email address!");
+            return;
+        }
+
+        if (window.pywebview && window.pywebview.api) {
+            try {
+                let success = await window.pywebview.api.save_profile_to_file(JSON.stringify(updatedProfile));
+                if (success) {
+                    alert("Profile updated successfully!");
+                    // תיקון הניווט (הסרת הפרמטר השני)
+                    await window.pywebview.api.navigate_to('home.html', 'Extratag - Profile');
+                } else {
+                    alert("Error: Update failed.");
+                }
+            } catch (err) {
+                console.error("Update profile error:", err);
+            }
+        }
+    }
+    </script>
+</body>
+</html>

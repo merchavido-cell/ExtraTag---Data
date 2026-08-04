@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExtraTag - Launcher</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0f172a;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .launcher-container {
+            text-align: center;
+            background-color: #1e293b;
+            padding: 50px 40px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+            max-width: 450px;
+            width: 90%;
+            z-index: 5;
+        }
+
+        .brand-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #38bdf8;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .brand-subtitle {
+            color: #94a3b8;
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+
+        .menu-options {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .launcher-btn {
+            background-color: #1e293b;
+            color: #ffffff;
+            border: 2px solid #334155;
+            padding: 16px 24px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-apps {
+            border-color: #38bdf8;
+            background-color: rgba(56, 189, 248, 0.05);
+        }
+
+        .btn-apps:hover {
+            background-color: #38bdf8;
+            color: #0f172a;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-shortcuts {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        .btn-shortcuts:hover {
+            background-color: #10b981;
+            color: #0f172a;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .launcher-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* חלונית פופ-אפ (Modal) */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background-color: #1e293b;
+            border: 2px solid #10b981;
+            padding: 35px;
+            border-radius: 14px;
+            max-width: 420px;
+            width: 85%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+
+        .modal-text {
+            color: #94a3b8;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-btn {
+            padding: 12px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            flex: 1;
+        }
+
+        .btn-yes {
+            background-color: #10b981;
+            color: #0f172a;
+        }
+
+        .btn-yes:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-no {
+            background-color: #334155;
+            color: #ffffff;
+            border: 1px solid #475569;
+        }
+
+        .btn-no:hover {
+            background-color: #475569;
+            transform: translateY(-2px);
+        }
+
+        /* תפריט בחירת אפליקציה ישירה בפופ-אפ */
+        .app-selection-zone {
+            border-top: 1px solid #334155;
+            padding-top: 15px;
+            margin-top: 15px;
+            text-align: left; /* Alignment modified for English */
+        }
+
+        .app-selection-zone label {
+            display: block;
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .app-select {
+            width: 100%;
+            padding: 10px;
+            background-color: #0f172a;
+            border: 1px solid #475569;
+            color: #ffffff;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="launcher-container">
+        <div class="brand-title">ExtraTag</div>
+        <div class="brand-subtitle">Welcome to ExtraTag</div>
+    </div>
+
+    <div id="first-time-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon">🔍</div>
+            <div class="modal-title">Quick Initial Setup</div>
+            <div class="modal-text">
+                Would you like to add system applications to your <strong>Windows Search bar</strong>? This allows you to launch them quickly from your keyboard at any time.
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn btn-yes" onclick="handleFirstTimeChoice(true)">Yes, sure</button>
+                <button class="modal-btn btn-no" onclick="handleFirstTimeChoice(false)">Not now</button>
+            </div>
+
+            <div class="app-selection-zone">
+                <label for="target-app">Select application to open</label>
+                <select id="target-app" class="app-select">
+                    <option value="Extratag - Profile">ExtraTag - Profile</option>
+                    <option value="Extratag - Email">ExtraTag - Email</option>
+                    <option value="Extratag - Setting">ExtraTag - Setting</option>
+                    <option value="Extratag - Apps">ExtraTag - Apps</option>
+                    <option value="Extratag - Storage">ExtraTag - Storage</option>
+                    <option value="Extratag - Vcall">ExtraTag - Vcall</option>
+                    <option value="Extratag - CodeX">ExtraTag - CodeX</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    window.onload = function() {
+        // Open popup only if it is a standard initial visit
+        let hasVisited = localStorage.getItem('extratag_first_visit');
+        if (!hasVisited) {
+            setTimeout(function() {
+                document.getElementById('first-time-modal').classList.add('active');
+            }, 400);
+        }
+    };
+
+    async function handleFirstTimeChoice(wantsShortcuts) {
+        document.getElementById('first-time-modal').classList.remove('active');
+        localStorage.setItem('extratag_first_visit', 'true');
+
+        if (wantsShortcuts) {
+            if (window.pywebview && window.pywebview.api) {
+                if (typeof window.pywebview.api.register_in_windows_search === 'function') {
+                    try {
+                        let success = await window.pywebview.api.register_in_windows_search();
+                        if (success) {
+                            alert("The application was successfully added to Windows Search!");
+                        } else {
+                            alert("Windows rejected the shortcut creation request.");
+                        }
+                    } catch (err) {
+                        console.error("Error calling python function:", err);
+                        alert("An error occurred while creating the shortcut: " + err);
+                    }
+                } else {
+                    alert("Error: The function 'register_in_windows_search' does not exist in main.py!");
+                }
+            } else {
+                alert("The pywebview API interface was not detected in the browser.");
+            }
+        }
+        
+        // Navigate directly via Python API to the selected folder
+        let selectedFolder = document.getElementById('target-app').value;
+        navigateTo(selectedFolder);
+    }
+
+    function navigateTo(folderName) {
+        if (window.pywebview && window.pywebview.api) {
+            window.pywebview.api.navigate_to("index.html", folderName);
+        } else {
+            alert("The pywebview API interface was not detected. Cannot navigate to: " + folderName);
+        }
+    }
+</script>
+
+</body>
+</html>

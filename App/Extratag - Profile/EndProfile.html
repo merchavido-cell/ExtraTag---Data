@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Avatar Builder</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        #colors_menu {
+            height: 50vh;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .color-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+        }
+        .color-circle:hover {
+            transform: scale(1.1);
+        }
+        #shapes_menu {
+            height: 10vh;
+            width: 100%;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: auto;
+        }
+        .menu-shape {
+            width: 45px;
+            height: 45px;
+            background-color: #555;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .circle { border-radius: 50%; }
+        .square { border-radius: 8px; }
+        #shape_container {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .shape {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 55px;
+            font-weight: bold;
+        }
+        #save_btn {
+            position: absolute;
+            bottom: 13vh;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 35px;
+            background-color: #38bdf8;
+            color: #121212;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+        }
+        #save_btn:hover {
+            background-color: #0ea5e9;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="colors_menu"></div>
+    
+    <div id="shape_container"></div>
+
+    <button id="save_btn" onclick="update()">Save Avatar</button>
+
+    <div id="shapes_menu">
+        <div class="menu-shape circle" onclick="createShape('circle')"></div>
+        <div class="menu-shape square" onclick="createShape('square')"></div>
+    </div>
+
+    <script>
+    let currentProfileRaw = null;
+    let first_letter = "E";
+    let currentColor = "#38bdf8";
+    let currentShapeType = "circle";
+    let currentShape = null;
+
+    const colors = ["#38bdf8", "#ef4444", "#10b981", "#f59e0b", "#ec4899", "#8b5cf6", "#f43f5e"];
+    const colorsMenu = document.getElementById("colors_menu");
+    const shape_container = document.getElementById("shape_container");
+
+    // יצירת פלטת הצבעים
+    colors.forEach(c => {
+        let div = document.createElement("div");
+        div.className = "color-circle";
+        div.style.backgroundColor = c;
+        div.onclick = () => selectColor(c);
+        colorsMenu.appendChild(div);
+    });
+
+    function setTextColor(bgColor) {
+        return "#ffffff"; 
+    }
+
+    function selectColor(color) {
+        currentColor = color;
+        if (currentShape) {
+            currentShape.style.backgroundColor = color;
+            currentShape.style.color = setTextColor(color);
+        }
+    }
+
+    function createShape(type) {
+        if (currentShape) currentShape.remove();
+        currentShapeType = type;
+        
+        currentShape = document.createElement("div");
+        currentShape.className = "shape " + type;
+        currentShape.innerText = first_letter;
+        currentShape.style.backgroundColor = currentColor;
+        currentShape.style.color = setTextColor(currentColor);
+        
+        shape_container.appendChild(currentShape);
+    }
+
+    window.addEventListener("pywebviewready", async function () {
+    try {
+        let result = await window.pywebview.api.get_active_profile();
+
+        if (typeof result === "string") {
+            result = JSON.parse(result);
+        }
+
+        console.log("get_active_profile:", result);
+
+        if (!result.success || !result.profile) {
+            alert("No active profile");
+            return;
+        }
+
+        currentProfileRaw = result.profile;
+
+        first_letter = (currentProfileRaw.firstName || "E")
+            .charAt(0)
+            .toUpperCase();
+
+        currentColor = currentProfileRaw.avatarColor || "#38bdf8";
+        currentShapeType = currentProfileRaw.avatarShape || "circle";
+
+        createShape(currentShapeType);
+
+    } catch (err) {
+        console.error(err);
+        alert(err);
+    }
+});
+
+    // ברירת מחדל אם לא נטען קובץ
+    createShape("circle");
+
+    async function update() {
+        if (!currentProfileRaw || Object.keys(currentProfileRaw).length === 0) {
+            alert("No profile loaded yet!");
+            return;
+        }
+
+        currentProfileRaw.avatarColor = currentColor;
+        currentProfileRaw.avatarShape = currentShapeType;
+
+        if (window.pywebview && window.pywebview.api) {
+            try {
+                let success = await window.pywebview.api.save_profile_to_file(JSON.stringify(currentProfileRaw));
+                if (success) {
+                    // ניווט ללא פרמטרים מיותרים
+                    await window.pywebview.api.navigate_to('home.html', 'Extratag - Profile');
+                } else {
+                    alert("Error saving avatar.");
+                }
+            } catch (err) {
+                console.error("Save avatar error:", err);
+            }
+        }
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+            margin: 0;
+        }
+
+        #words {
+            font-size: 35px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        #container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-box {
+            width: 320px;
+            min-height: 55px;
+            background-color: #1e293b;
+            border-bottom: 4px solid #38bdf8;
+            border-left: 2px solid #38bdf8;
+            border-radius: 6px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .profile-box:hover {
+            background-color: #334155;
+            transform: translateY(-2px);
+        }
+
+        .message {
+            color: #94a3b8;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="words">Choose your profile</div>
+
+<div id="container"></div>
+
+<script>
+let container = document.getElementById("container");
+let isLoading = false;
+
+async function loadProfiles() {
+
+    if (isLoading) return;
+    isLoading = true;
+
+    let profilesList = [];
+
+    if (window.pywebview && window.pywebview.api) {
+        try {
+            let rawFiles = await window.pywebview.api.get_profiles_from_file();
+            profilesList = JSON.parse(rawFiles);
+        } catch (err) {
+            console.error("❌ שגיאה בקבלת הפרופילים:", err);
+        }
+    }
+
+    container.innerHTML = "";
+
+    if (profilesList && profilesList.length > 0) {
+
+        profilesList.forEach((profile) => {
+
+            let pBox = document.createElement("div");
+            pBox.className = "profile-box";
+
+            pBox.textContent =
+                `${profile.firstName || ''} ${profile.lastName || ''}`.trim()
+                || "Unnamed User";
+
+            pBox.dataset.profileId = profile.id;
+
+            pBox.onclick = async function(e) {
+
+                let clickedProfileId = e.currentTarget.dataset.profileId;
+
+                if (window.pywebview && window.pywebview.api) {
+
+                    try {
+
+                        let success = await window.pywebview.api.set_active_profile(clickedProfileId);
+
+                        if (success) {
+                            setTimeout(() => {
+                                window.pywebview.api.navigate_to(
+                                    'loginKNOW.html',
+                                    'Extratag - Email'
+                                );
+                            }, 150);
+                        } else {
+                            console.error("set_active_profile returned false");
+                        }
+
+                    } catch (err) {
+                        console.error(err);
+                    }
+                }
+
+            };
+
+            container.appendChild(pBox);
+
+        });
+
+    } else {
+
+        let msg = document.createElement("div");
+        msg.className = "message";
+        msg.textContent = "No profiles found.";
+        container.appendChild(msg);
+
+    }
+
+    isLoading = false;
+}
+
+window.addEventListener("pywebviewready", function () {
+    loadProfiles();
+});
+
+window.onload = function () {
+    setTimeout(loadProfiles, 300);
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vcall - Home</title>
+    <style>
+        /* Base setup and reset */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* Main app container */
+        .vcall-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Top navigation header */
+        .vcall-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        /* App logo image container placed at the absolute top-right */
+        .vcall-logo {
+            display: flex;
+            align-items: center;
+            max-height: 75px;
+            user-select: none;
+        }
+
+        .vcall-logo img {
+            height: 65px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* User profile area placed at the absolute top-left */
+        .vcall-profile-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .vcall-username {
+            font-size: 15px;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        .vcall-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #334155;
+            border: 2px solid #818cf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(129, 140, 248, 0.2);
+        }
+
+        .vcall-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .vcall-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(129, 140, 248, 0.4);
+        }
+
+        /* Logout button styling */
+        .vcall-logout-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            margin-left: 10px;
+        }
+
+        .vcall-logout-btn:hover {
+            background: rgba(239, 68, 68, 0.4);
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+        }
+
+        /* Main interactive center */
+        .vcall-main {
+            flex: 1;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 35px;
+        }
+
+        /* Welcome greeting header */
+        .vcall-welcome {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .vcall-welcome h1 {
+            font-size: 36px;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        .vcall-welcome p {
+            color: #94a3b8;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        /* Quick action buttons layout grid */
+        .vcall-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .vcall-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.25s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .vcall-btn-new {
+            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+        }
+
+        .vcall-btn-new:hover {
+            background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 20px -3px rgba(79, 70, 229, 0.4);
+        }
+
+        .vcall-btn-join {
+            background: #1e293b;
+            border: 1px solid #334155;
+        }
+
+        .vcall-btn-join:hover {
+            background: #273549;
+            transform: translateY(-3px);
+            border-color: #475569;
+        }
+
+        .vcall-btn-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        /* Join via link input menu */
+        .join-input-group {
+            display: flex;
+            gap: 12px;
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 16px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .join-input-group input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .join-input-group input::placeholder {
+            color: #64748b;
+        }
+
+        .join-input-group button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .join-input-group button:hover {
+            background: #6366f1;
+        }
+
+        /* Call settings dashboard card */
+        .vcall-settings-panel {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .vcall-settings-panel h3 {
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .setting-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .setting-row span {
+            font-size: 15px;
+            color: #e2e8f0;
+        }
+
+        /* Custom Toggle Switch markup */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #475569;
+            transition: .3s;
+            border-radius: 26px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #4f46e5;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* --- New Modal Popup Styles --- */
+        .vcall-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .vcall-modal-overlay.active {
+            opacity: 1; pointer-events: auto;
+        }
+
+        .vcall-modal {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 24px;
+            padding: 30px;
+            width: 90%; max-width: 480px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .vcall-modal-overlay.active .vcall-modal {
+            transform: translateY(0);
+        }
+
+        .vcall-modal h2 {
+            margin-top: 0; font-size: 24px; color: #fff; display: flex; align-items: center; gap: 10px;
+        }
+
+        .modal-field {
+            margin-bottom: 20px;
+        }
+        
+        .modal-field label {
+            display: block; font-size: 13px; color: #94a3b8; margin-bottom: 8px; font-weight: 500;
+        }
+        
+        .modal-input-wrapper {
+            display: flex; gap: 10px;
+        }
+        
+        .modal-input {
+            flex: 1; background: #0f172a; border: 1px solid #334155; border-radius: 12px;
+            padding: 12px; color: #fff; font-size: 15px; outline: none; transition: border 0.2s;
+        }
+        
+        .modal-input:focus { border-color: #6366f1; }
+
+        .btn-copy {
+            background: #334155; color: #e2e8f0; border: none; padding: 0 15px; 
+            border-radius: 12px; cursor: pointer; font-weight: 600; transition: background 0.2s;
+        }
+        
+        .btn-copy:hover { background: #475569; }
+
+        .modal-actions {
+            display: flex; justify-content: flex-end; gap: 12px; margin-top: 25px;
+        }
+        
+        .btn-secondary {
+            background: transparent; color: #94a3b8; border: 1px solid #334155;
+            padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 600;
+        }
+        
+        .btn-secondary:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%); color: #fff; border: none;
+            padding: 12px 28px; border-radius: 12px; cursor: pointer; font-weight: 600;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        
+        .btn-primary:hover { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
+    </style>
+</head>
+<body>
+
+    <div class="vcall-container">
+        
+        <header class="vcall-header">
+            <div class="vcall-profile-area">
+                <div class="vcall-avatar" id="userAvatarContainer" title="Profile and Account Settings" onclick="window.pywebview.api.navigate_to('home.html', 'Extratag - Profile')">
+                    <span id="avatarPlaceholder">👤</span>
+                </div>
+                <span class="vcall-username" id="displayUsername">Loading...</span>
+                <button class="vcall-logout-btn" onclick="logout()">Logout</button>
+            </div>
+            
+            <div class="vcall-logo">
+                <img src="ExtraTag-Vcall.png" alt="ExtraTag Vcall Logo">
+            </div>
+        </header>
+
+        <main class="vcall-main">
+            
+            <div class="vcall-welcome">
+                <h1>Hello <span id="welcomeName">Guest</span>, ready for a call?</h1>
+                <p>Create a new instant meeting or join an existing session layout</p>
+            </div>
+
+            <div class="vcall-actions">
+                <button class="vcall-btn vcall-btn-new" onclick="createNewCall()">
+                    <span class="vcall-btn-icon">➕</span>
+                    <span>New Meeting</span>
+                </button>
+                <button class="vcall-btn vcall-btn-join" onclick="toggleJoinInput()">
+                    <span class="vcall-btn-icon">🔗</span>
+                    <span>Join with Code</span>
+                </button>
+            </div>
+
+            <div id="joinInputGroup" class="join-input-group" style="display: none;">
+                <input type="text" id="meetingCode" placeholder="Enter meeting code or link URL...">
+                <button onclick="joinCall()">Join</button>
+            </div>
+
+            
+
+        </main>
+    </div>
+
+    <!-- The Create Call Modal Popup Window -->
+    <div id="createCallModal" class="vcall-modal-overlay">
+        <div class="vcall-modal">
+            <h2>✨ New Meeting Ready</h2>
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Configure your room details before starting the session.</p>
+            
+            <!-- Meeting Custom Name Input -->
+            <div class="modal-field">
+                <label for="modalRoomTitle">Meeting Name / Topic</label>
+                <input type="text" id="modalRoomTitle" class="modal-input" placeholder="e.g., ExtraTag Weekly Sync">
+            </div>
+
+            <!-- Meeting Unique Code Display -->
+            <div class="modal-field">
+                <label>Meeting Code</label>
+                <div class="modal-input-wrapper">
+                    <input type="text" id="modalRoomCode" class="modal-input" readonly>
+                    <button class="btn-copy" onclick="copyModalValue('modalRoomCode')">Copy</button>
+                </div>
+            </div>
+
+            <!-- Full Meeting Web Link Display -->
+            <div class="modal-field">
+                <label>Meeting Link</label>
+                <div class="modal-input-wrapper">
+                    <input type="text" id="modalRoomLink" class="modal-input" readonly>
+                    <button class="btn-copy" onclick="copyModalValue('modalRoomLink')">Copy</button>
+                </div>
+            </div>
+
+            <!-- Action Controls inside Modal footer -->
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeCreateModal()">Cancel</button>
+                <button class="btn-primary" onclick="launchMeetingFile()">Start Meeting</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ===== הגדרות שרת Cloudflare =====
+    
+    const SERVER = "https://vcall-server.merchavido.workers.dev";
+
+   async function createRoomOnServer(roomId) {
+
+    const url = `${SERVER}/room/${roomId}`;
+
+    try {
+        const res = await fetch(url, { method: "POST" });
+
+
+        const text = await res.text();
+
+        return text;
+
+    } catch (err) {
+
+        // ניתוח שגיאה מדויק
+        const bugReport = `
+סוג שגיאה: ${err.name}
+הודעת שגיאה: ${err.message}
+
+stack (מאיפה זה נפל):
+${err.stack}
+
+הסיבה המדויקת:
+${explainFetchError(err)}
+        `;
+
+        return null;
+    }
+}
+
+// פונקציה שמסבירה את השגיאה בצורה חד־משמעית
+function explainFetchError(err) {
+    if (err.name === "TypeError" && err.message.includes("Failed to fetch")) {
+        return `
+הבקשה לא יצאה מהאפליקציה בכלל.
+PyWebView חסם את החיבור לפני שהוא הגיע לשרת.
+השרת לא קיבל שום בקשה ולכן לא יכול לענות.
+זה קורה כשמנוע ה-WebView חוסם דומיין מסוים או חיבור HTTPS מסוים.
+        `;
+    }
+
+    return "שגיאה אחרת.";
+}
+
+
+
+
+    async function joinRoomOnServer(roomId) {
+        try {
+            const res = await fetch(`${SERVER}/room/${roomId}`, {
+                method: "GET"
+            });
+            const text = await res.text();
+            console.log("Join room response:", text);
+
+
+            return text;
+        } catch (err) {
+            console.error("Server error (joinRoom):", err);
+
+
+            return null;
+        }
+    }
+
+    // ===== פרופיל משתמש / אוואטר =====
+    // ===== פרופיל משתמש / אוואטר =====
+    function applyProfileData(profile) {
+        if (profile) {
+            if (typeof profile === 'string') {
+                try { profile = JSON.parse(profile); } catch(e) {}
+            }
+
+            // שליפת שם המשתמש הפעיל
+            const activeName = profile.firstName || profile.custom_username || "User";
+
+            document.getElementById('displayUsername').textContent = activeName;
+            document.getElementById('welcomeName').textContent = activeName;
+
+            const avatarContainer = document.getElementById('userAvatarContainer');
+
+            if (profile.avatar_url) {
+                // אם קיימת תמונת פרופיל, נציג אותה ונחזיר את הגדרות ה-CSS המקוריות
+                avatarContainer.style.background = "#334155";
+                avatarContainer.innerHTML = `<img src="${profile.avatar_url}" alt="${activeName}">`;
+            } else {
+                // חילוץ האות הראשונה של השם
+                const firstLetter = activeName.charAt(0).toUpperCase();
+                
+                // שליפת צבעי הרקע והטקסט מתוך ה-JSON (עם ערכי ברירת מחדל לגיבוי)
+                const bgColor = profile.avatarColor || '#10b981'; // ברירת מחדל ירוק מה-JSON של גל
+                const textColor = profile.avatarTextColor || '#ffffff'; // ברירת מחדל לבן
+
+                // החלת הצבעים הדינמיים ישירות על ה-style של קונטיינר האוואטר
+                avatarContainer.style.backgroundColor = bgColor;
+                avatarContainer.style.borderColor = bgColor; // התאמת צבע הגבול החיצוני לצבע הרקע
+
+                // רינדור האות הראשונה עם צבע הטקסט הדינמי
+                avatarContainer.innerHTML = `
+                    <span style="
+                        font-weight: bold; 
+                        color: ${textColor}; 
+                        font-size: 20px; 
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center; 
+                        width: 100%; 
+                        height: 100%;
+                        user-select: none;
+                    ">${firstLetter}</span>
+                `;
+            }
+        }
+    }
+
+    async function loadActiveProfile() {
+        if (window.pywebview && window.pywebview.api && window.pywebview.api.get_active_profile) {
+            try {
+                let raw = await window.pywebview.api.get_active_profile();
+                let res = typeof raw === 'string' ? JSON.parse(raw || "{}") : raw;
+                let profileData = (res && res.profile) ? res.profile : res;
+                applyProfileData(profileData);
+            } catch (error) {
+                console.error("Pywebview API execution error:", error);
+                document.getElementById('displayUsername').textContent = "User Mode";
+            }
+        }
+    }
+
+    if (window.pywebview && window.pywebview.api) {
+        loadActiveProfile();
+    } else {
+        window.addEventListener('pywebviewready', loadActiveProfile);
+    }
+
+    // ===== Logout =====
+    async function logout(){
+        try {  
+            let raw = await window.pywebview.api.get_active_profile();
+            let res = typeof raw === 'string' ? JSON.parse(raw || "{}") : raw;
+            let profile = (res && res.profile) ? res.profile : res;
+
+            if(profile && profile.email){
+                await window.pywebview.api.logout_by_email(profile.email);
+            }
+
+            sessionStorage.clear();
+            setTimeout(() => {
+                window.pywebview.api.navigate_to("Fastin.html", "Extratag - Vcall");
+            }, 1);
+        } catch(e) {
+            console.error(e);
+            setTimeout(() => {
+                window.pywebview.api.navigate_to("Fastin.html", "Extratag - Vcall");
+            }, 1);
+        }
+    }
+
+    // ===== יצירת שיחה חדשה =====
+    async function createNewCall() {
+        const uniqueId = 'ET-' + Math.floor(Math.random() * 900000 + 100000);
+
+        // יצירת חדר בשרת Cloudflare
+        const serverResponse = await createRoomOnServer(uniqueId);
+        if (!serverResponse) {
+            alert("Server error: Could not create room.");
+            return;
+        }
+
+        const fullLink = 'https://vcall.extra-tag.com/' + uniqueId;
+
+        document.getElementById('modalRoomCode').value = uniqueId;
+        document.getElementById('modalRoomLink').value = fullLink;
+        document.getElementById('modalRoomTitle').value = "ExtraTag Meeting";
+
+        document.getElementById('createCallModal').classList.add('active');
+    }
+
+    function closeCreateModal() {
+        document.getElementById('createCallModal').classList.remove('active');
+    }
+
+    function copyModalValue(elementId) {
+        const inputEl = document.getElementById(elementId);
+        inputEl.select();
+        inputEl.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(inputEl.value);
+        alert("Copied to clipboard!");
+    }
+
+  function launchMeetingFile() {
+    const code = document.getElementById('modalRoomCode').value;
+    const title = document.getElementById('modalRoomTitle').value.trim() || "Untitled Call";
+
+    closeCreateModal();
+
+    // שמירת הנתונים בזיכרון המקומי של התוכנה
+    sessionStorage.setItem('vcall_room_id', code);
+    sessionStorage.setItem('vcall_room_title', title);
+    
+    // 🔥 שורת הזהב החסרה: מגדירה שיוצר החדר הוא האדמין
+    sessionStorage.setItem('vcall_is_admin', 'true');
+
+    // ניווט נקי באמצעות ה-API של PyWebView
+    window.pywebview.api.navigate_to("call.html", "Extratag - Vcall");
+}
+    // ===== הצטרפות לשיחה קיימת =====
+    function toggleJoinInput() {
+        const group = document.getElementById('joinInputGroup');
+        if (group.style.display === 'none' || !group.style.display) {
+            group.style.display = 'flex';
+            document.getElementById('meetingCode').focus();
+        } else {
+            group.style.display = 'none';
+        }
+    }
+
+    async function joinCall() {
+    let codeInput = document.getElementById('meetingCode').value.trim();
+    if (!codeInput) {
+        alert('Invalid meeting parameter arguments. Provide code or URL address.');
+        return;
+    }
+
+    // חילוץ ה-ID במקרה שהמשתמש הדביק קישור מלא
+    let code = codeInput;
+    if (codeInput.includes("/")) {
+        const parts = codeInput.split("/");
+        code = parts[parts.length - 1] || parts[parts.length - 2];
+    }
+
+    const serverResponse = await joinRoomOnServer(code);
+    if (!serverResponse) {
+        alert("Server error: Could not join room.");
+        return;
+    }
+
+    // שמירת הנתונים בזיכרון המקומי
+    sessionStorage.setItem('vcall_room_id', code);
+    sessionStorage.setItem('vcall_room_title', "Joined Call");
+
+    // ניווט נקי באמצעות ה-API של PyWebView
+    window.pywebview.api.navigate_to("call.html", "Extratag - Vcall");
+}
+</script>
+
+</body>
+</html>

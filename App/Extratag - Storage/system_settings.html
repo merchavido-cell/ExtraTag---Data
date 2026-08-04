@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExtraTag - System Settings</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 🔝 Header Section */
+        .header-container {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            right: 30px;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        /* 👤 User Profile & Avatar styles */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .user-profile:hover {
+            background-color: #e2e8f0;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 20px;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
+        }
+
+        /* Dynamic avatar shapes */
+        .avatar.circle { border-radius: 50%; }
+        .avatar.square { border-radius: 0px; }
+        .avatar.rounded { border-radius: 10px; }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .user-name {
+            font-weight: bold;
+            font-size: 14px;
+            color: #0f172a;
+        }
+
+        .user-status {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .logo-container img {
+            height: 75px; 
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* 👈 Sidebar Section */
+        .sidebar {
+            width: 280px;
+            padding-top: 130px;
+            padding-left: 20px;
+            padding-right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        /* 🎨 כפתורי ניווט */
+        .nav-btn {
+            width: 100%;
+            background-color: #64748b;
+            color: #ffffff;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(100, 116, 139, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #475569;
+            box-shadow: 0 6px 12px rgba(71, 85, 105, 0.3);
+        }
+
+        .nav-btn.active {
+            background-color: #f97316;
+            box-shadow: 0 4px 6px rgba(249, 115, 22, 0.2);
+        }
+
+        .nav-btn.active:hover {
+            background-color: #ea580c;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(234, 88, 12, 0.3);
+        }
+
+        /* 📊 Storage Progress Widget in Sidebar */
+        .storage-widget {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .storage-widget-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .storage-progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .storage-progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #3b82f6;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+        .storage-text {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        /* 🖼️ Main Content Container */
+        .main-content {
+            flex: 1;
+            margin-top: 130px;
+            margin-right: 30px;
+            margin-bottom: 30px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        /* Settings Card Group */
+        .card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Storage Stats Grid */
+        .storage-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-bg {
+            background: #e2e8f0;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .progress-bar-fill {
+            background: #3b82f6;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Upgrade Section */
+        .upgrade-section {
+            background: #fff7ed;
+            border: 1px dashed #fdba74;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .upgrade-info h4 {
+            font-size: 15px;
+            color: #c2410c;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .upgrade-info p {
+            font-size: 13px;
+            color: #ea580c;
+        }
+
+        .upgrade-btn {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(249, 115, 22, 0.2);
+            transition: all 0.2s;
+        }
+
+        .upgrade-btn:hover {
+            background: #ea580c;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(234, 88, 12, 0.3);
+        }
+
+        /* 🪟 Modal / Dialog Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            direction: rtl;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            color: #0f172a;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .plan-option {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8fafc;
+        }
+
+        .plan-info {
+            font-size: 15px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .plan-price {
+            font-weight: bold;
+            color: #f97316;
+        }
+
+        .buy-btn-disabled {
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #94a3b8;
+            background-color: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            cursor: not-allowed;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🔝 Header -->
+    <div class="header-container">
+        <!-- 👤 User Profile Avatar -->
+        <div class="user-profile" onclick="openProfileSettings()">
+            <div class="avatar circle" id="userAvatar">U</div>
+            <div class="user-info">
+                <span class="user-name" id="userNameText">User</span>
+                <span class="user-status" id="userStatusText">Online</span>
+            </div>
+        </div>
+
+        <div class="logo-container">
+            <img src="ExtraTag-Storage.png" alt="ExtraTag Storage Logo">
+        </div>
+    </div>
+
+    <!-- 👈 Sidebar -->
+    <div class="sidebar">
+        <button class="nav-btn" onclick="goToHome()">Dashboard</button>
+        <button class="nav-btn active">System Settings</button>
+
+        <div class="storage-widget">
+            <div class="storage-widget-title">
+                <span>Storage Usage</span>
+                <span id="storagePercentText">0%</span>
+            </div>
+            <div class="storage-progress-bar">
+                <div class="storage-progress-fill" id="storageProgressFill"></div>
+            </div>
+            <div class="storage-text" id="storageUsageText">0.0 MB / 5.0 MB used</div>
+        </div>
+
+        <button class="nav-btn" style="margin-top: auto; background-color: #64748b;" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- 🖼️ Main Content -->
+    <div class="main-content">
+
+        <div class="header">
+            <h1>System Settings</h1>
+            <p>Manage your local app environment and storage limitations.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Storage Analyzer</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar-bg">
+                    <div id="storageProgress" class="progress-bar-fill"></div>
+                </div>
+                <div class="progress-text" style="margin-top: 8px;">
+                    <span id="storagePercentLabel">Calculating usage...</span>
+                    <span>Free Tier (5.0 MB Max)</span>
+                </div>
+            </div>
+
+            <div class="storage-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Total Space</div>
+                    <div id="totalSpace" class="stat-value">5.0 MB</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Used Space</div>
+                    <div id="usedSpace" class="stat-value" style="color: #ef4444;">-</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Free Space</div>
+                    <div id="freeSpace" class="stat-value" style="color: #22c55e;">-</div>
+                </div>
+            </div>
+
+            <div class="upgrade-section">
+                <div class="upgrade-info">
+                    <h4>Need more enterprise cloud backup volume?</h4>
+                    <p>Upgrade your profile tier to unlock dedicated secure global clusters.</p>
+                </div>
+                <button class="upgrade-btn" onclick="triggerVolumeUpgrade()">Expand Capacity</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Environment Specifications</div>
+            <p style="font-size: 14px; color: #475569; line-height: 1.6;">
+                <strong>App Version:</strong> 1.4.0-Beta<br>
+                <strong>Bridge Engine:</strong> pywebview v5.1<br>
+                <strong>Max Allocated Limit:</strong> <span style="color: #f97316; font-weight: bold;">5.0 MB</span><br>
+                <strong>Database Sync Status:</strong> <span style="color: #22c55e; font-weight: 600;">Active & Synced</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 🪟 Upgrade Plans Modal -->
+    <div id="upgradeModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>שדרוג נפח אחסון</h3>
+                <button class="close-btn" onclick="closeUpgradeModal()">✕</button>
+            </div>
+
+            <!-- חבילת 50GB -->
+            <div class="plan-option">
+                <div class="plan-info">חבילת אחסון 50GB</div>
+                <div class="plan-price">₪15 / חודש</div>
+            </div>
+
+            <!-- חבילת 100GB -->
+            <div class="plan-option">
+                <div class="plan-info">חבילת אחסון 100GB</div>
+                <div class="plan-price">₪25 / חודש</div>
+            </div>
+
+            <!-- כפתור מנוטרל -->
+            <button class="buy-btn-disabled" disabled>החבילות אינן זמינות כעת</button>
+        </div>
+    </div>
+
+    <script>
+        let activeProfileObj = null;
+        const MAX_STORAGE_LIMIT_BYTES = 5 * 1024 * 1024; // 5 MB
+
+        window.addEventListener('pywebviewready', function() {
+            refreshSettingsData();
+        });
+
+        function refreshSettingsData() {
+            if (!window.pywebview || !window.pywebview.api) return;
+
+            window.pywebview.api.get_active_profile().then(function(data) {
+                let res = typeof data === 'string' ? JSON.parse(data) : data;
+                let localProfile = (res && res.profile) ? res.profile : res;
+
+                if (!localProfile || (!localProfile.email && !localProfile.id)) {
+                    console.error("No active user found.");
+                    return;
+                }
+
+                window.pywebview.api.get_global_history().then(function(globalDataRaw) {
+                    let globalProfiles = [];
+                    try {
+                        globalProfiles = typeof globalDataRaw === 'string' ? JSON.parse(globalDataRaw || "[]") : globalDataRaw;
+                    } catch(e) {
+                        console.error("Error parsing global history:", e);
+                    }
+                    
+                    if (!Array.isArray(globalProfiles)) globalProfiles = [];
+
+                    let localEmail = localProfile.email ? localProfile.email.toLowerCase().trim() : "";
+                    let localId = localProfile.id ? String(localProfile.id) : "";
+
+                    let foundGlobalProfile = globalProfiles.find(p => {
+                        if (!p || p.success === false) return false;
+                        let pId = p.id ? String(p.id) : "";
+                        let pEmail = p.email ? p.email.toLowerCase().trim() : "";
+                        return (localId && pId && localId === pId) || (localEmail && pEmail && localEmail === pEmail);
+                    });
+
+                    activeProfileObj = foundGlobalProfile ? foundGlobalProfile : localProfile;
+
+                    // Update Profile Info & Avatar
+                    let fullName = `${activeProfileObj.firstName || ''} ${activeProfileObj.lastName || ''}`.trim() || 'User';
+                    document.getElementById("userNameText").innerText = fullName;
+                    
+                    let avatarEl = document.getElementById("userAvatar");
+                    if (activeProfileObj.firstName) {
+                        avatarEl.innerText = activeProfileObj.firstName.charAt(0).toUpperCase();
+                    }
+                    
+                    if (activeProfileObj.avatarShape) {
+                        avatarEl.className = `avatar ${activeProfileObj.avatarShape}`;
+                    }
+
+                    if (activeProfileObj.avatarColor) {
+                        avatarEl.style.backgroundColor = activeProfileObj.avatarColor;
+                    } else {
+                        avatarEl.style.backgroundColor = '#f97316';
+                    }
+
+                    // Update Storage Calculations
+                    updateStorageMetrics();
+                });
+            }).catch(function(err) {
+                console.error("Error fetching profile:", err);
+            });
+        }
+
+        function updateStorageMetrics() {
+            let filesList = (activeProfileObj && activeProfileObj.files) ? activeProfileObj.files : [];
+            let totalUsedBytes = filesList.reduce((sum, f) => sum + (f.file_size || 0), 0);
+
+            let usedMB = totalUsedBytes / (1024 * 1024);
+            let freeMB = Math.max(0, 5.0 - usedMB);
+            let usedPercent = Math.min(100, Math.round((totalUsedBytes / MAX_STORAGE_LIMIT_BYTES) * 100));
+
+            // עדכון כרטיס ה-Storage Analyzer הראשי
+            document.getElementById("totalSpace").innerText = "5.0 MB";
+            document.getElementById("usedSpace").innerText = `${usedMB.toFixed(2)} MB`;
+            document.getElementById("freeSpace").innerText = `${freeMB.toFixed(2)} MB`;
+            
+            let mainProgressFill = document.getElementById("storageProgress");
+            mainProgressFill.style.width = usedPercent + "%";
+
+            if (usedPercent > 90) {
+                mainProgressFill.style.backgroundColor = "#ef4444";
+            } else if (usedPercent > 70) {
+                mainProgressFill.style.backgroundColor = "#eab308";
+            } else {
+                mainProgressFill.style.backgroundColor = "#3b82f6";
+            }
+
+            document.getElementById("storagePercentLabel").innerText = `${usedPercent}% used of your total capacity`;
+
+            // עדכון ה-Widget בסרגל הצד (Sidebar)
+            document.getElementById("storagePercentText").innerText = `${usedPercent}%`;
+            document.getElementById("storageUsageText").innerText = `${usedMB.toFixed(2)} MB / 5.0 MB used`;
+            let sidebarFill = document.getElementById("storageProgressFill");
+            sidebarFill.style.width = usedPercent + "%";
+            sidebarFill.style.backgroundColor = mainProgressFill.style.backgroundColor;
+        }
+
+        function openProfileSettings() {
+            if (window.pywebview && window.pywebview.api && window.pywebview.api.navigate_to) {
+                window.pywebview.api.navigate_to('home.html', 'Extratag - Profile');
+            }
+        }
+
+        function triggerVolumeUpgrade() {
+            document.getElementById("upgradeModal").style.display = "flex";
+        }
+
+        function closeUpgradeModal() {
+            document.getElementById("upgradeModal").style.display = "none";
+        }
+
+        function goToHome() {
+            if (window.pywebview && window.pywebview.api && window.pywebview.api.navigate_to) {
+                window.pywebview.api.navigate_to('home.html', 'Extratag - Storage');
+            }
+        }
+
+        function logout() {
+            if (window.pywebview && window.pywebview.api && window.pywebview.api.logout) {
+                window.pywebview.api.logout();
+            }
+        }
+    </script>
+</body>
+</html>

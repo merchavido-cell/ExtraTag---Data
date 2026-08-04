@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExtraTag - Password Verification</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+        .password-box {
+            background-color: #1e293b;
+            width: 360px;
+            padding: 40px 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+            text-align: center;
+        }
+        h2 {
+            font-size: 24px;
+            color: #38bdf8;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        input[type="password"], input[type="text"] {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            background-color: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: #f8fafc;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #38bdf8;
+        }
+        .toggle-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+        }
+        .verify-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #38bdf8;
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .verify-btn:hover {
+            background-color: #0ea5e9;
+        }
+        #error-message {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* עיצוב כפתור החזרה בצד ימין למטה */
+        .btn-back {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #f8fafc; /* צבע הרקע כמו צבע הטקסט הראשי */
+            color: #0f172a;            /* טקסט כהה לניגודיות קריאה */
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;       /* מראה מלבני מעודן */
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+        .btn-back:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="password-box">
+        <h2>Hello</h2>
+        <p>Please enter your password to continue</p>
+        
+        <div class="input-wrapper">
+            <input type="password" id="passwordField" placeholder="Enter password">
+            <button class="toggle-btn" id="eyeIcon" onclick="togglePasswordVisibility()">👁️</button>
+        </div>
+
+        <button class="verify-btn" onclick="verifyPassword()">Verify</button>
+        <div id="error-message">Incorrect password. Please try again.</div>
+    </div>
+
+    <!-- כפתור חזרה בצד ימין למטה -->
+    <button class="btn-back" onclick="goBack()">Back</button>
+
+    <script>
+let userPasswordFromDb = "";
+let currentProfileRaw = null;
+
+async function loadProfile() {
+    try {
+        console.log("🔥 loading profile...");
+
+        let raw = await window.pywebview.api.get_active_profile();
+        console.log("📦 RAW:", raw);
+
+        if (typeof raw === "string") {
+            raw = JSON.parse(raw);
+        }
+
+        if (!raw.success) {
+            alert(raw.message || "No profile found");
+            return;
+        }
+
+        const profile = raw.profile;
+        currentProfileRaw = profile;
+
+        console.log("✅ PROFILE:", profile);
+
+        document.querySelector("h2").innerText =
+            "Hello, " + profile.firstName;
+
+        userPasswordFromDb = profile.password;
+
+    } catch (err) {
+        console.error("🔥 loadProfile error:", err);
+        alert("Error loading profile: " + err);
+    }
+}
+
+function togglePasswordVisibility() {
+    const input = document.getElementById("passwordField");
+    const icon = document.getElementById("eyeIcon");
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.innerText = "🔒";
+    } else {
+        input.type = "password";
+        icon.innerText = "👁️";
+    }
+}
+
+async function verifyPassword() {
+    const input = document.getElementById("passwordField").value;
+    const error = document.getElementById("error-message");
+
+    console.log("🔐 checking password...");
+
+    if (!currentProfileRaw) {
+        alert("No profile loaded yet");
+        return;
+    }
+
+    console.log("USER INPUT:", input);
+    console.log("DB PASSWORD:", userPasswordFromDb);
+
+    if (input === userPasswordFromDb) {
+        console.log("✅ PASSWORD CORRECT");
+
+        error.style.display = "none";
+
+        try {
+            const res = await window.pywebview.api.update_login_status(
+                currentProfileRaw.id,
+                true
+            );
+
+            console.log("📤 login update result:", res);
+
+            window.pywebview.api.navigate_to(
+                "home.html",
+                "Extratag - Profile"
+            );
+
+        } catch (err) {
+            console.error("🔥 login error:", err);
+            alert("Login update failed");
+        }
+
+    } else {
+        console.log("❌ WRONG PASSWORD");
+
+        error.style.display = "block";
+        document.getElementById("passwordField").value = "";
+    }
+}
+
+// פונקציית חזרה לדף Fastin.html
+function goBack() {
+    if (window.pywebview && window.pywebview.api) {
+        window.pywebview.api.navigate_to("Acounts.html", "Extratag - Profile");
+    }
+}
+
+window.addEventListener("pywebviewready", loadProfile);
+</script>
+</body>
+</html>

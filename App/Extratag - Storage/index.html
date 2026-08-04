@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>Mail</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #startlogo {
+            position: absolute;
+            width: 200px;
+            height: auto;
+            opacity: 0;
+            transform-origin: center;
+            transition: opacity 1.3s ease, transform 1.3s ease;
+            transform: translate(-50%, -50%) scale(3);
+            left: 50%;
+            top: 50%;
+        }
+
+        #startlogo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        #startlogo.move-to-corner {
+            opacity: 1;
+            transform: translate(calc(50vw - 100%), calc(-50vh)) scale(1);
+        }
+    </style>
+</head>
+<body>
+
+<div id="startlogo">
+    <img src="ExtraTag-Storage.png" alt="ExtraTag Logo">
+</div>
+
+<script>
+async function openApp() {
+    if (!window.pywebview || !window.pywebview.api) {
+        console.log("pywebview לא מוכן");
+        return;
+    }
+
+    try {
+        let result = await window.pywebview.api.get_active_profile();
+        result = JSON.parse(result);
+
+        if (!result.success || !result.profile) {
+            window.pywebview.api.navigate_to("Fastin.html", "Extratag - Storage");
+            return;
+        }
+
+        // בדיקה מתוך תת-האובייקט profile
+        if (result.profile.is_logged_in === true) {
+            window.pywebview.api.navigate_to("home.html", "Extratag - Storage");
+        } else {
+            window.pywebview.api.navigate_to("Fastin.html", 'Extratag - Storage');
+        }
+
+    } catch (err) {
+        console.log("שגיאה ב-openApp:", err);
+        window.pywebview.api.navigate_to("Fastin.html", 'Extratag - Storage');
+    }
+}
+
+window.onload = function () {
+    const logo = document.getElementById("startlogo");
+
+    setTimeout(() => {
+        logo.style.opacity = 1;
+    }, 300);
+
+    setTimeout(() => {
+        logo.classList.add("move-to-corner");
+    }, 2000);
+
+    setTimeout(() => {
+        openApp();
+    }, 3000);
+};
+</script>
+</body>
+</html>

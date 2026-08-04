@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משתמשים</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            max-width: 800px;
+        }
+
+        .profile-box {
+            background-color: #ffffff;
+            border: 2px solid #0078d4;
+            border-radius: 8px;
+            padding: 20px 40px;
+            min-width: 150px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .profile-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background-color: #f0f7ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container"></div>
+
+    <script>
+        let container = document.getElementById("container");
+
+        async function loadProfiles() {
+            container.innerHTML = ""; 
+            let profilesList = [];
+
+            if (window.pywebview && window.pywebview.api) {
+                try {
+                    let rawFiles = await window.pywebview.api.get_profiles_from_file();
+                    profilesList = JSON.parse(rawFiles);
+                } catch (err) {
+                    console.log("שגיאה בקבלת הפרופילים מפייתון:", err);
+                }
+            }
+
+            if (profilesList && profilesList.length > 0) {
+                profilesList.forEach((profile) => {
+                    let pBox = document.createElement("div");
+                    pBox.className = "profile-box";
+                    pBox.textContent = `${profile.firstName || ''} ${profile.lastName || ''}`;
+                    pBox.dataset.profileId = profile.id;
+
+                    pBox.onclick = async function(e) {
+                        let clickedProfileId = e.currentTarget.dataset.profileId;
+
+                        if (window.pywebview && window.pywebview.api) {
+                            try {
+                                let success = await window.pywebview.api.set_active_profile(clickedProfileId);
+                                if (success) {
+                                    window.pywebview.api.navigate_to('loginKNOW.html', 'Extratag - Vcall');
+                                } else {
+                                    alert("שגיאה בבחירת הפרופיל");
+                                }
+                            } catch (err) {
+                                console.log(err);
+                            }
+                        }
+                    };
+                    container.appendChild(pBox);
+                });
+            } else {
+                container.innerHTML = "<p style='color: #666;'>לא נמצאו משתמשים רשומים במערכת.</p>";
+            }
+        }
+
+        window.onload = function() {
+            setTimeout(loadProfiles, 500);
+        };
+    </script>
+</body>
+</html>

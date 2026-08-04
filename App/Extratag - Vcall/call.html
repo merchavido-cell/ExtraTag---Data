@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>VCALL - Application</title>
+    <style>
+        body {
+            margin: 0;
+            background: #0f172a;
+            color: #fff;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 12px 20px;
+            background: #020617;
+            border-bottom: 1px solid #1e293b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 { margin: 0; font-size: 18px; }
+
+        .admin-badge {
+            background: #10b981;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .video-area {
+            flex: 3;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+
+        .video-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 320px;
+            background: #1e293b;
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+        }
+
+        .video-box {
+            width: 100%;
+            height: 220px;
+            border-radius: 8px;
+            background: #000;
+            object-fit: cover;
+        }
+
+        #localVideo {
+            transform: scaleX(-1);
+            border: 2px solid #818cf8;
+        }
+
+        .name-tag {
+            margin-top: 6px;
+            font-size: 14px;
+            color: #f8fafc;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-area {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            background: #020617;
+            border-radius: 12px;
+            border: 1px solid #1e293b;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            background: #0b1120;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chat-msg {
+            font-size: 13px;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .chat-msg strong {
+            color: #38bdf8;
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input-row input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #1e293b;
+            color: #fff;
+            outline: none;
+        }
+
+        .chat-input-row button {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #e11d48;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .admin-controls {
+            display: none;
+            background: #1e293b;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .admin-controls button {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            flex: 1;
+        }
+
+        #lobbyOverlay, #nameModal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .modal-box {
+            background: #1e293b;
+            padding: 24px;
+            border-radius: 12px;
+            width: 320px;
+            text-align: center;
+        }
+
+        .modal-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 12px 0;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .modal-box button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            background: #e11d48;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        footer {
+            padding: 12px;
+            text-align: center;
+            background: #020617;
+            border-top: 1px solid #1e293b;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        footer button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #e11d48;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .btn-secondary { background: #334155 !important; }
+    </style>
+</head>
+<body>
+
+<div id="nameModal">
+    <div class="modal-box">
+        <h3>Enter your name</h3>
+        <input id="nameInput" type="text" placeholder="Full name..." />
+        <button onclick="saveNameAndStart()">Continue to call</button>
+    </div>
+</div>
+
+<div id="lobbyOverlay">
+    <h2>Requesting to join the call...</h2>
+    <p>Waiting for admin approval</p>
+</div>
+
+<header>
+    <h1>Room: <span id="roomTitle">Loading...</span></h1>
+    <div id="adminBadge" class="admin-badge" style="display: none;">Room Admin</div>
+</header>
+
+<main>
+    <section class="video-area" id="videoContainer">
+        <div class="video-wrapper">
+            <video id="localVideo" autoplay playsinline muted class="video-box"></video>
+            <div id="localUserName" class="name-tag">Loading name...</div>
+        </div>
+    </section>
+
+    <section class="chat-area">
+        <div id="adminPanel" class="admin-controls">
+            <button onclick="adminMuteAll()">Mute All 🔇</button>
+            <button id="toggleChatBtn" onclick="adminToggleChat()">Block Chat 🔒</button>
+            <button id="screenShareBtn" onclick="toggleScreenShare()">Share Screen 🖥️</button>
+        </div>
+
+        <div id="chatMessages" class="chat-messages"></div>
+
+        <div class="chat-input-row">
+            <input id="chatText" type="text" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendChatMessage()" />
+            <button id="sendChatBtn" onclick="sendChatMessage()">Send</button>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <button id="micToggleBtn" class="btn-secondary" onclick="toggleLocalAudio()">Microphone: Active 🎙️</button>
+    <button onclick="leaveRoom()">Leave</button>
+</footer>
+
+<script>
+    const SERVER_WS = "wss://vcall-server.merchavido.workers.dev";
+
+    let roomId = null;
+    let localStream = null;
+    let screenStream = null;
+    let ws = null;
+    let myId = null;
+    let myName = "";
+    let isAdmin = false;
+    let isManagedRoom = false;
+    let chatBlocked = false;
+    let isSharingScreen = false;
+
+    const peers = new Map();
+    const userNames = new Map();
+    const rtcConfig = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
+
+    async function init() {
+        roomId = sessionStorage.getItem('vcall_room_id');
+        if (!roomId) {
+            alert("Room ID not found.");
+            leaveRoom();
+            return;
+        }
+
+        isManagedRoom = roomId.startsWith("ET");
+        if (isManagedRoom) {
+            isAdmin = sessionStorage.getItem('vcall_is_admin') === 'true';
+            if (isAdmin) {
+                document.getElementById("adminPanel").style.display = "flex";
+                document.getElementById("adminBadge").style.display = "block";
+            }
+        }
+
+        document.getElementById("roomTitle").textContent = roomId;
+
+        await resolveIdentity();
+    }
+
+    async function resolveIdentity() {
+        if (window.pywebview && window.pywebview.api && window.pywebview.api.get_active_profile) {
+            try {
+                let raw = await window.pywebview.api.get_active_profile();
+                let res = typeof raw === 'string' ? JSON.parse(raw || "{}") : raw;
+                let profile = (res && res.profile) ? res.profile : res;
+                if (profile && (profile.firstName || profile.lastName)) {
+                    myName = `${profile.firstName || ''} ${profile.lastName || ''}`.trim();
+                }
+            } catch (e) {
+                console.warn("Could not fetch pywebview profile", e);
+            }
+        }
+
+        if (!myName) {
+            myName = localStorage.getItem("vcall_user_name") || "";
+        }
+
+        if (!myName) {
+            document.getElementById("nameModal").style.display = "flex";
+        } else {
+            startSession();
+        }
+    }
+
+    function saveNameAndStart() {
+        const val = document.getElementById("nameInput").value.trim();
+        if (!val) return alert("Please enter a valid name");
+        myName = val;
+        localStorage.setItem("vcall_user_name", val);
+        document.getElementById("nameModal").style.display = "none";
+        startSession();
+    }
+
+    async function startSession() {
+        document.getElementById('localUserName').textContent = `${myName} (You)`;
+        try {
+            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            document.getElementById("localVideo").srcObject = localStream;
+        } catch (e) {
+            alert("Error accessing camera/microphone: " + e.message);
+        }
+        connectWebSocket();
+    }
+
+    function connectWebSocket() {
+        ws = new WebSocket(`${SERVER_WS}/room/${roomId}`);
+
+        ws.onopen = () => {
+            if (isManagedRoom && !isAdmin) {
+                document.getElementById("lobbyOverlay").style.display = "flex";
+                ws.send(JSON.stringify({ type: "lobby-knock", name: myName }));
+            } else {
+                ws.send(JSON.stringify({ type: "ready-to-call", name: myName, isAdmin: isAdmin }));
+            }
+        };
+
+        ws.onmessage = async (event) => {
+            const data = JSON.parse(event.data);
+
+            if (data.type === "welcome") {
+                myId = data.userId;
+            }
+            else if (data.type === "lobby-knock" && isManagedRoom && isAdmin) {
+                let accept = confirm(`User "${data.name}" requests to join the call. Allow?`);
+                ws.send(JSON.stringify({
+                    type: "lobby-response",
+                    targetUserId: data.from,
+                    allowed: accept
+                }));
+            }
+            else if (data.type === "lobby-response" && isManagedRoom && !isAdmin) {
+                if (data.allowed) {
+                    document.getElementById("lobbyOverlay").style.display = "none";
+                    ws.send(JSON.stringify({ type: "ready-to-call", name: myName, isAdmin: false }));
+                } else {
+                    alert("The admin has declined your request to join.");
+                    leaveRoom();
+                }
+            }
+            else if (data.type === "user-joined" || data.type === "ready-to-call") {
+                if (data.userId === myId) return;
+
+                if (data.name) {
+                    userNames.set(data.userId, data.name);
+                    updatePeerNameTag(data.userId, data.name);
+                }
+
+                if (data.type === "user-joined") {
+                    const pc = createPeerConnection(data.userId);
+                    const offer = await pc.createOffer();
+                    await pc.setLocalDescription(offer);
+                    ws.send(JSON.stringify({ type: "offer", to: data.userId, offer, name: myName }));
+                } else {
+                    createPeerConnection(data.userId);
+                }
+            }
+            else if (data.type === "offer") {
+                if (data.name) {
+                    userNames.set(data.from, data.name);
+                    updatePeerNameTag(data.from, data.name);
+                }
+                const pc = createPeerConnection(data.from);
+                await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+                const answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+                ws.send(JSON.stringify({ type: "answer", to: data.from, answer, name: myName }));
+            }
+            else if (data.type === "answer") {
+                if (data.name) {
+                    userNames.set(data.from, data.name);
+                    updatePeerNameTag(data.from, data.name);
+                }
+                await peers.get(data.from)?.setRemoteDescription(new RTCSessionDescription(data.answer));
+            }
+            else if (data.type === "candidate") {
+                await peers.get(data.from)?.addIceCandidate(new RTCIceCandidate(data.candidate));
+            }
+            else if (data.type === "user-left") {
+                removePeer(data.userId);
+            }
+            else if (data.type === "chat") {
+                addChatMessage(data.name || userNames.get(data.from) || "Participant", data.message);
+            }
+            else if ((data.type === "admin-command" || data.type === "admin-broadcast") && isManagedRoom) {
+                handleAdminCommand(data);
+            }
+        };
+    }
+
+    function createPeerConnection(targetUserId) {
+        if (peers.has(targetUserId)) return peers.get(targetUserId);
+
+        const pc = new RTCPeerConnection(rtcConfig);
+        const activeStream = isSharingScreen ? screenStream : localStream;
+
+        if (activeStream) {
+            activeStream.getTracks().forEach(track => pc.addTrack(track, activeStream));
+        }
+
+        pc.onicecandidate = (e) => {
+            if (e.candidate) {
+                ws.send(JSON.stringify({ type: "candidate", to: targetUserId, candidate: e.candidate }));
+            }
+        };
+
+        pc.ontrack = (e) => {
+            let video = document.getElementById(`remoteVideo_${targetUserId}`);
+            if (!video) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "video-wrapper";
+                wrapper.id = `wrapper_${targetUserId}`;
+
+                video = document.createElement("video");
+                video.id = `remoteVideo_${targetUserId}`;
+                video.autoplay = true;
+                video.playsInline = true;
+                video.className = "video-box";
+
+                const nameTag = document.createElement("div");
+                nameTag.id = `nameTag_${targetUserId}`;
+                nameTag.className = "name-tag";
+                nameTag.textContent = userNames.get(targetUserId) || "Loading name...";
+
+                wrapper.appendChild(video);
+                wrapper.appendChild(nameTag);
+                document.getElementById("videoContainer").appendChild(wrapper);
+            }
+            video.srcObject = e.streams[0];
+        };
+
+        peers.set(targetUserId, pc);
+        return pc;
+    }
+
+    function updatePeerNameTag(userId, name) {
+        const tag = document.getElementById(`nameTag_${userId}`);
+        if (tag) tag.textContent = name;
+    }
+
+    function removePeer(userId) {
+        peers.get(userId)?.close();
+        peers.delete(userId);
+        userNames.delete(userId);
+        const wrapper = document.getElementById(`wrapper_${userId}`);
+        if (wrapper) wrapper.remove();
+    }
+
+    function handleAdminCommand(data) {
+        if (data.command === "mute") {
+            if (!isAdmin && localStream) {
+                localStream.getAudioTracks().forEach(track => {
+                    track.enabled = false;
+                });
+                document.getElementById("micToggleBtn").textContent = "Microphone: Muted 🔇";
+                addChatMessage("System", "The admin muted your microphone.");
+            }
+        } else if (data.command === "toggle-chat") {
+            chatBlocked = data.value;
+            document.getElementById("chatText").disabled = chatBlocked;
+            document.getElementById("sendChatBtn").disabled = chatBlocked;
+            document.getElementById("chatText").placeholder = chatBlocked ? "Chat blocked by admin" : "Type a message...";
+            addChatMessage("System", chatBlocked ? "Chat blocked by admin." : "Chat has been reopened.");
+        }
+    }
+
+    function adminMuteAll() {
+        if (!isAdmin || !isManagedRoom) return;
+        ws.send(JSON.stringify({ type: "admin-command", command: "mute" }));
+        ws.send(JSON.stringify({ type: "admin-broadcast", command: "mute" }));
+        addChatMessage("Admin", "Sent mute command to all participants.");
+    }
+
+    function adminToggleChat() {
+        if (!isAdmin || !isManagedRoom) return;
+        chatBlocked = !chatBlocked;
+        ws.send(JSON.stringify({ type: "admin-command", command: "toggle-chat", value: chatBlocked }));
+        ws.send(JSON.stringify({ type: "admin-broadcast", command: "toggle-chat", value: chatBlocked }));
+        document.getElementById("toggleChatBtn").textContent = chatBlocked ? "Unblock Chat 🔓" : "Block Chat 🔒";
+    }
+
+    function toggleLocalAudio() {
+        if (!localStream) return;
+        const audioTrack = localStream.getAudioTracks()[0];
+        if (audioTrack) {
+            audioTrack.enabled = !audioTrack.enabled;
+            document.getElementById("micToggleBtn").textContent = audioTrack.enabled ? "Microphone: Active 🎙️" : "Microphone: Muted 🔇";
+        }
+    }
+
+    async function toggleScreenShare() {
+        if (!isAdmin) return;
+        if (!isSharingScreen) {
+            try {
+                screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                const screenTrack = screenStream.getVideoTracks()[0];
+
+                const localVideo = document.getElementById("localVideo");
+                localVideo.srcObject = screenStream;
+                localVideo.style.transform = "none";
+
+                for (let [userId, pc] of peers.entries()) {
+                    const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video');
+                    if (sender) sender.replaceTrack(screenTrack);
+                }
+
+                screenTrack.onended = () => stopScreenShare();
+                isSharingScreen = true;
+                document.getElementById("screenShareBtn").textContent = "Stop Sharing 🛑";
+            } catch (e) {
+                console.error("Error sharing screen:", e);
+            }
+        } else {
+            stopScreenShare();
+        }
+    }
+
+    function stopScreenShare() {
+        if (!isSharingScreen) return;
+        if (screenStream) screenStream.getTracks().forEach(t => t.stop());
+
+        const videoTrack = localStream.getVideoTracks()[0];
+        const localVideo = document.getElementById("localVideo");
+        localVideo.srcObject = localStream;
+        localVideo.style.transform = "scaleX(-1)";
+
+        for (let [userId, pc] of peers.entries()) {
+            const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video');
+            if (sender && videoTrack) sender.replaceTrack(videoTrack);
+        }
+
+        isSharingScreen = false;
+        document.getElementById("screenShareBtn").textContent = "Share Screen 🖥️";
+    }
+
+    function addChatMessage(sender, msg) {
+        const box = document.getElementById("chatMessages");
+        const div = document.createElement("div");
+        div.className = "chat-msg";
+        div.innerHTML = `<strong>${sender}:</strong> ${msg}`;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    function sendChatMessage() {
+        if (chatBlocked && !isAdmin) return;
+        const input = document.getElementById("chatText");
+        const text = input.value.trim();
+        if (!text) return;
+
+        ws.send(JSON.stringify({ type: "chat", from: myId, name: myName, message: text }));
+        addChatMessage(myName, text);
+        input.value = "";
+    }
+
+    function leaveRoom() {
+        if (localStream) localStream.getTracks().forEach(t => t.stop());
+        if (screenStream) screenStream.getTracks().forEach(t => t.stop());
+        try {
+            window.pywebview.api.navigate_to("home.html", "Extratag - Vcall");
+        } catch (e) {
+            window.location.href = "home.html";
+        }
+    }
+
+    init();
+</script>
+</body>
+</html>

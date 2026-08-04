@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משתמשים</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            max-width: 800px;
+        }
+
+        .profile-box {
+            background-color: #ffffff;
+            border: 2px solid #0078d4;
+            border-radius: 8px;
+            padding: 20px 40px;
+            min-width: 150px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .profile-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background-color: #f0f7ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container"></div>
+
+    <script>
+        let container = document.getElementById("container");
+
+        async function loadProfiles() {
+            container.innerHTML = ""; // ניקוי המסך לפני הטעינה
+            let profilesList = [];
+
+            // בדיקה אם ה-API של פייתון זמין וקיים
+            if (window.pywebview && window.pywebview.api) {
+                try {
+                    let rawFiles = await window.pywebview.api.get_profiles_from_file();
+                    profilesList = JSON.parse(rawFiles);
+                } catch (err) {
+                    console.log("שגיאה בקבלת הפרופילים מפייתון:", err);
+                }
+            }
+
+            // יצירת קופסה לכל פרופיל שנמצא
+            if (profilesList && profilesList.length > 0) {
+                profilesList.forEach((profile) => {
+                    let pBox = document.createElement("div");
+                    pBox.className = "profile-box";
+                    
+                    // הצגת שם פרטי ושם משפחה
+                    pBox.textContent = `${profile.firstName} ${profile.lastName}`;
+                    
+                    // תוקן: שונה סימן ההערה מ-# ל-// כדי שלא יקרוס
+                    // התיקון: שומרים את ה-ID הייחודי של המשתמש ישירות על הקופסה בתוך ה-HTML
+                    pBox.dataset.profileId = profile.id;
+                    
+                    // בעת לחיצה על משתמש - שולפים את ה-ID שנשמר על התיבה הספציפית שנלחצה
+                    pBox.onclick = async function(e) {
+                        // e.currentTarget תמיד מצביע על התיבה הספציפית שעליה לחצת!
+                        let clickedProfileId = e.currentTarget.dataset.profileId;
+
+                        if (window.pywebview && window.pywebview.api) {
+                            try {
+                                // שולחים לפייתון את ה-ID המדויק של התיבה שנלחצה
+                                let success = await window.pywebview.api.set_active_profile(clickedProfileId);
+                                if (success) {
+                                    window.pywebview.api.navigate_to('loginKNOW.html');
+                                } else {
+                                    alert("שגיאה בבחירת הפרופיל");
+                                }
+                            } catch (err) {
+                                console.log(err);
+                            }
+                        }
+                    };
+                    container.appendChild(pBox);
+                });
+            } else {
+                container.innerHTML = "<p style='color: #666;'>No users in the system</p>";
+            }
+        }
+
+        // טעינת הפרופילים חצי שנייה לאחר עליית הדף
+        window.onload = function() {
+            setTimeout(loadProfiles, 500);
+        };
+    </script>
+</body>
+</html>

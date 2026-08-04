@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Log in</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+        }
+
+        #words {
+            font-size: 35px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .profile-box {
+            height: 50px;
+            width: 300px;
+            background-color: #1e293b;
+            border-bottom: 4px solid #38bdf8;
+            border-left: 2px solid #38bdf8;
+            border-radius: 6px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .profile-box:hover {
+            background-color: #334155;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="words">Log in for your profile:</div>
+    <div id="profiles-container"></div>
+
+    <script>
+    // משתנה שימנע ריצה כפולה במקביל
+    let isLoading = false;
+
+    async function loadProfiles() {
+        console.log("🔥 loadProfiles started");
+
+        // אם הפונקציה כבר רצה כרגע, אל תריץ אותה שוב
+        if (isLoading) {
+            console.log("🔥 Already loading, skipping execution");
+            return;
+        }
+
+        if (!window.pywebview || !window.pywebview.api) {
+            console.log("🔥 pywebview.api not ready yet, retrying...");
+            return;
+        }
+
+        isLoading = true; // סימון שהתחלנו לעבוד
+
+        let container = document.getElementById("profiles-container");
+        container.innerHTML = "";
+
+        try {
+            let profilesJson = await window.pywebview.api.get_profiles_from_file();
+            console.log("🔥 profilesJson received:", profilesJson);
+
+            let profiles = JSON.parse(profilesJson);
+
+            if (profiles && profiles.length > 0) {
+                profiles.forEach(profile => {
+                    if (!profile.firstName || !profile.lastName) {
+                        return;
+                    }
+
+                    let box = document.createElement("div");
+                    box.className = "profile-box";
+                    box.textContent = profile.firstName + " " + profile.lastName;
+
+                    box.onclick = async function() {
+                        console.log("🔥 Profile clicked:", profile.id);
+                        await window.pywebview.api.set_active_profile(profile.id);
+                        await window.pywebview.api.navigate_to("loginKNOW.html", "Extratag - Profile");
+                    };
+
+                    container.appendChild(box);
+                });
+            }
+        } catch (err) {
+            console.error("🔥 Error reading profiles:", err);
+        }
+
+        // Login
+        let loginBox = document.createElement("div");
+        loginBox.className = "profile-box";
+        loginBox.textContent = "Login with another account";
+
+        loginBox.onclick = async function() {
+            if (window.pywebview && window.pywebview.api) {
+                try {
+                    await window.pywebview.api.navigate_to("login.html", "Extratag - Profile");
+                } catch (err) {
+                    console.error("🔥 JS ERROR in login button:", err);
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        };
+
+        container.appendChild(loginBox);
+
+        // Register
+        let registerBox = document.createElement("div");
+        registerBox.className = "profile-box";
+        registerBox.textContent = "Register";
+
+        registerBox.onclick = async function() {
+            if (window.pywebview && window.pywebview.api) {
+                try {
+                    await window.pywebview.api.navigate_to("register.html", "Extratag - Profile");
+                } catch (err) {
+                    console.error("🔥 JS ERROR in register button:", err);
+                }
+            } else {
+                window.location.href = "register.html";
+            }
+        };
+
+        container.appendChild(registerBox);
+
+        isLoading = false; // סיימנו, משחררים את הנעילה
+    }
+
+    // הפעלה ברגע ש-pywebview מוכן
+    window.addEventListener("pywebviewready", function() {
+        loadProfiles();
+    });
+
+    // פונקציית גיבוי למקרה שהאירוע התפספס
+    window.onload = function() {
+        setTimeout(loadProfiles, 500);
+    };
+    </script>
+
+</body>
+</html>

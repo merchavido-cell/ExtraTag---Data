@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ExtraTag - Profile</title>
+    <style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #startlogo {
+        position: absolute;
+        width: 120px; 
+        height: auto;
+        z-index: 10;
+        opacity: 0;
+        transform-origin: center;
+        transition: opacity 1.3s ease, transform 1.3s ease;
+        transform: translate(0, 0) scale(3);
+    }
+    #startlogo img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    .move-to-corner {
+        transform: translate(calc(50vw - 80px), calc(-50vh + 65px)) scale(1) !important;
+        opacity: 1 !important;
+    }
+    </style>
+</head>
+<body>
+
+    <div id="startlogo">
+        <img src="ExtraTag Profile.png" alt="Logo">
+    </div>
+
+    <script>
+    let introFinished = false;
+
+    async function proceedToNextPage() {
+    if (!introFinished) return;
+
+    try {
+        let result = await window.pywebview.api.get_active_profile();
+
+        // אם פייתון מחזיר json.dumps
+        result = JSON.parse(result);
+
+        setTimeout(() => {
+            if (
+                result.success &&
+                result.profile &&
+                result.profile.is_logged_in === true
+            ) {
+                window.pywebview.api.navigate_to(
+                    "home.html",
+                    "Extratag - Profile"
+                );
+            } else {
+                window.pywebview.api.navigate_to(
+                    "Acounts.html",
+                    "Extratag - Profile"
+                );
+            }
+        }, 50);
+
+    } catch (err) {
+        console.log(err);
+
+        window.pywebview.api.navigate_to(
+            "Acounts.html",
+            "Extratag - Profile"
+        );
+    }
+}
+
+    window.onload = function () {
+        const logo = document.getElementById("startlogo");
+        
+        let cameFromReady1 = sessionStorage.getItem("cameFromReady1");
+        if (cameFromReady1 === "true") {
+            logo.style.opacity = 1;
+            logo.classList.add("move-to-corner");
+            introFinished = true;
+            proceedToNextPage();
+            return;
+        }
+
+        let introAlreadyPlayed = sessionStorage.getItem("introPlayed");
+
+        if (introAlreadyPlayed) {
+            logo.style.opacity = 1;
+            logo.classList.add("move-to-corner");
+            introFinished = true;
+            proceedToNextPage();
+        } else {
+            sessionStorage.setItem("introPlayed", "true"); 
+
+            setTimeout(() => {
+                logo.style.opacity = 1;
+            }, 100);
+
+            setTimeout(() => {
+                logo.classList.add("move-to-corner");
+            }, 1500);
+
+            setTimeout(() => {
+                introFinished = true;
+                proceedToNextPage();
+            }, 2800);
+        }
+    };
+
+    window.addEventListener('pywebviewready', function() {
+        if (introFinished) {
+            proceedToNextPage();
+        }
+    });
+    </script>
+</body>
+</html>

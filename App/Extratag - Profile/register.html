@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>ExtraTag - Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        .box {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            width: 420px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+            border-radius: 6px;
+            border: none;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #38bdf8;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background: #0ea5e9;
+        }
+        .error {
+            border: 2px solid #ef4444 !important;
+        }
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+        .info-text {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        /* עיצוב כפתור החזרה בצד ימין למטה */
+        .btn-back {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #f8fafc; /* צבע הרקע כמו צבע הטקסט הראשי */
+            color: #0f172a;            /* טקסט כהה לניגודיות קריאה */
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;       /* מראה מלבני מעודן */
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            width: auto;              /* מניעת דריסה של CSS הכפתור הכללי */
+            margin-top: 0;
+        }
+        .btn-back:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <!-- STEP 1: Registration Form -->
+        <div id="step1" class="step active">
+            <h2 style="margin-top:0; text-align:center; color:#38bdf8;">Create Account</h2>
+            <input type="text" id="firstName" placeholder="First Name">
+            <input type="text" id="lastName" placeholder="Last Name">
+            <input type="text" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <input type="password" id="confirmPassword" placeholder="Confirm Password">
+            <button id="registerBtn" onclick="performRegister()">Register</button>
+        </div>
+
+        <!-- STEP 2: Email Verification -->
+        <div id="step2" class="step">
+            <h2 style="margin-top:0; text-align:center; color:#38bdf8;">Verify Email</h2>
+            <p class="info-text">A 6-digit verification code has been sent to:<br><strong id="verifyEmailTarget" style="color:white;"></strong></p>
+            <input type="text" id="verifyCode" placeholder="Enter 6-digit code" maxlength="6" style="text-align: center; letter-spacing: 4px; font-weight: bold; font-size: 18px;">
+            <button onclick="verifyCodeAndComplete()">Verify & Continue</button>
+        </div>
+    </div>
+
+    <!-- כפתור חזרה בצד ימין למטה -->
+    <button class="btn-back" onclick="goBack()">Back</button>
+
+    <script>
+    let generatedCode = "";
+    let tempUserProfile = null;
+
+    async function performRegister() {
+        let fields = ["firstName", "lastName", "email", "password", "confirmPassword"];
+        fields.forEach(f => document.getElementById(f).classList.remove("error"));
+
+        let userProfile = {};
+        let isValid = true;
+
+        fields.forEach(f => {
+            let val = document.getElementById(f).value.trim();
+            if (!val) {
+                document.getElementById(f).classList.add("error");
+                isValid = false;
+            }
+            userProfile[f] = val;
+        });
+
+        if (!isValid) {
+            alert("Please fill all fields!");
+            return;
+        }
+
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(userProfile.email)) {
+            document.getElementById("email").classList.add("error");
+            alert("Invalid email address!");
+            return;
+        }
+
+        if (userProfile.password !== userProfile.confirmPassword) {
+            document.getElementById("password").classList.add("error");
+            document.getElementById("confirmPassword").classList.add("error");
+            alert("Passwords do not match!");
+            return;
+        }
+
+        // יצירת קוד אימות בן 6 ספרות
+        generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+        tempUserProfile = userProfile;
+
+        // שליחת הודעת מייל דרך calc@extra-tag.com
+        const senderEmail = "calc@extra-tag.com";
+        const receiver = userProfile.email;
+        const subject = "Registration Verification Code - ExtraTag";
+        const body = `Welcome to ExtraTag!\n\nYour 6-digit verification code is: ${generatedCode}`;
+
+        const regBtn = document.getElementById("registerBtn");
+        regBtn.disabled = true;
+        regBtn.textContent = "Sending Code...";
+
+        try {
+            if (window.pywebview && window.pywebview.api && window.pywebview.api.send_email) {
+                let resRaw = await window.pywebview.api.send_email(senderEmail, receiver, subject, body);
+                
+                // טיפול בתוצאה (בין אם מוחזר כ-JSON string או Boolean)
+                let res = typeof resRaw === "string" ? JSON.parse(resRaw) : resRaw;
+                
+                if (res === false || (res && res.success === false)) {
+                    alert("❌ Failed to send verification email. Please check your email address.");
+                    regBtn.disabled = false;
+                    regBtn.textContent = "Register";
+                    return;
+                }
+            } else {
+                console.log("🔒 [SIMULATION MODE] Verification Code:", generatedCode);
+                alert(`[SIMULATION MODE] Verification Code sent: ${generatedCode}`);
+            }
+
+            // מעבר ל-Step 2
+            document.getElementById("verifyEmailTarget").textContent = receiver;
+            document.getElementById("step1").classList.remove("active");
+            document.getElementById("step2").classList.add("active");
+
+        } catch (err) {
+            console.error("Error sending verification email:", err);
+            alert("An error occurred while sending the email.");
+            regBtn.disabled = false;
+            regBtn.textContent = "Register";
+        }
+    }
+
+    async function verifyCodeAndComplete() {
+        const enteredCode = document.getElementById("verifyCode").value.trim();
+
+        if (!enteredCode) {
+            alert("Please enter the verification code.");
+            return;
+        }
+
+        if (enteredCode !== generatedCode) {
+            alert("❌ Incorrect verification code! Please check your inbox.");
+            return;
+        }
+
+        // הקוד נכון! שמירת הפרופיל ואימות ההרשמה
+        if (window.pywebview && window.pywebview.api) {
+            try {
+                tempUserProfile.id = crypto.randomUUID();
+                tempUserProfile.is_logged_in = true;
+                tempUserProfile.is_selected = true;
+
+                let success = await window.pywebview.api.save_profile_to_file(JSON.stringify(tempUserProfile));
+                
+                if (success) {
+                    sessionStorage.setItem("cameFromReady1", "true");
+                    await window.pywebview.api.navigate_to('MoreEditProfile.html', 'Extratag - Profile');
+                } else {
+                    alert("Error: Failed to save the profile.");
+                }
+            } catch (err) {
+                console.error("Registration save error:", err);
+            }
+        }
+    }
+
+    // פונקציית חזרה לדף Acounts.html
+    function goBack() {
+        if (window.pywebview && window.pywebview.api) {
+            window.pywebview.api.navigate_to("Acounts.html", "Extratag - Profile");
+        }
+    }
+    </script>
+</body>
+</html>
