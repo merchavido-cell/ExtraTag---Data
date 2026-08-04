@@ -18,7 +18,7 @@ source.include_exts = py,png,jpg,kv,atlas,html,js,css,json
 version = 1.0.6
 
 # תלויות Python הנדרשות להרצה
-requirements = python3,kivy,pywebview,requests
+requirements = python3,kivy,requests,certifi,urllib3
 
 # כיוון המסך (portrait, landscape או all)
 orientation = portrait
