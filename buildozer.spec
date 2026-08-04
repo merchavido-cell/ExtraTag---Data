@@ -26,6 +26,9 @@ orientation = portrait
 # הגדרת הרשאות (כגון גישה לאינטרנט)
 android.permissions = INTERNET
 
+# ארכיטקטורת המעבד (הגדרה יחידה למניעת שגיאות בצינור הבנייה)
+android.archs = arm64-v8a
+
 [buildozer]
 # רמת הדיווחיות של התהליך (2 = מפורט)
 log_level = 2
