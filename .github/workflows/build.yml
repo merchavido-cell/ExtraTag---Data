@@ -21,7 +21,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential ccache git libffi-dev libssl-dev python3-dev zip unzip zlib1g-dev openjdk-17-jdk autoconf automake libtool pkg-config
           pip install --upgrade pip
-          pip install "buildozer==1.5.0" "cython<3.0.0" "python-for-android==2024.1.21"
+          pip install --upgrade buildozer
+          pip install --upgrade cython
+          pip install --upgrade python-for-android
 
       - name: Build with Buildozer
         run: |
