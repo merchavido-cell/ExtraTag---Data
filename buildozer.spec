@@ -1,20 +1,24 @@
 [app]
-title = ExtraTag
-package.name = extratag
-package.domain = com.extratag
+title = ExtraTag Phone
+package.name = extratagphone
+package.domain = org.extratag
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas,html,js,css,json
-
-version = 1.0.6
-
-# תלויות מותאמות לבניית אנדרואיד עם תקשורת מוצפנת (HTTPS)
-requirements = python3,kivy,openssl,requests,urllib3,certifi
-
+source.include_exts = py,png,jpg,kv,atlas,html,css,js
+source.include_patterns = Extratag_Email/*,Extratag_Vcall/*
+version = 0.1
+requirements = python3,kivy,pyjnius
 orientation = portrait
+osx.python_version = 3
+osx.kivy_version = 1.9.1
+fullscreen = 0
 android.permissions = INTERNET
-android.archs = arm64-v8a
 android.api = 33
-android.minapi = 24
+android.minapi = 21
+android.ndk_api = 21
+android.ndk = 25b
+android.accept_sdk_license = True
+p4a.branch = release-2024.01.21
 
 [buildozer]
 log_level = 2
+warn_on_root = 1
