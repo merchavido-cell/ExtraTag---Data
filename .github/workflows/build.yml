@@ -1,37 +1,38 @@
 name: Build Android APK
 
 on:
+  push:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    - name: Checkout Repository
+      uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential ccache git libffi-dev libssl-dev python3-dev zip unzip zlib1g-dev openjdk-17-jdk autoconf automake libtool pkg-config
-          pip install --upgrade pip
-          pip install --upgrade buildozer
-          pip install --upgrade cython
-          pip install --upgrade python-for-android
+    - name: Install Dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libsqlite3-dev cmake libssl-dev
+        pip install --upgrade buildozer cython
 
-      - name: Build with Buildozer
-        run: |
-          buildozer android clean
-          yes | buildozer android debug
+    - name: Build APK with Buildozer
+      run: |
+        cd Phone
+        export ANDROID_NDK_HOME=""
+        export ANDROID_NDK_ROOT=""
+        buildozer android debug
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: ExtraTag-APK
-          path: bin/*.apk
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Extratag-Phone-APK
+        path: Phone/bin/*.apk
