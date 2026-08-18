@@ -1645,98 +1645,52 @@ if __name__ == "__main__":
     # 0. בדיקת עדכון מהשרת
     auto_update_from_server()
 
-    # 1. הגדרת נתיבים לפי הסביבה
+    # 1. הגדרת נתיבים
     if getattr(sys, "frozen", False):
-        base_directory = sys._MEIPASS
+        # במצב EXE, הנתיב הוא איפה שה-EXE יושב
         exe_directory = os.path.dirname(sys.executable)
+        base_directory = exe_directory 
     else:
         base_directory = os.path.dirname(os.path.abspath(__file__))
         exe_directory = base_directory
 
     # 2. בדיקת גרסה
     status, prev_ver = check_version_status(exe_directory)
-    if status == "first_run":
-        print("🚀 First run detected!")
-    elif status == "upgrade":
-        print(f"🎉 Upgraded from {prev_ver} to {CURRENT_VERSION}")
-    else:
-        print(f"ℹ️ Running ExtraTag version {CURRENT_VERSION}")
 
     # 3. ארגומנטים
     parser = argparse.ArgumentParser()
     parser.add_argument("--app", type=str, help="Target app folder name")
     args, unknown = parser.parse_known_args()
 
-    # 4. אתחול API וסינכרון
+    # 4. אתחול API
     api = Api(base_directory)
     sync_local_history_from_global(api.db_path)
 
-    # 5. הגדרת נתיב ה-HTML
+    # 5. תיקון קריטי: הגדרת הנתיב החדש
+    # אם שינית ל-Computer_Windows, אנחנו נשתמש בזה כבסיס לתיקיות האפליקציות
     selected_folder = args.app if args.app else "Extratag - Apps"
+    
+    # בודקים אם התיקייה נמצאת תחת base_directory
     initial_path = os.path.join(base_directory, selected_folder, "index.html")
+    
+    # ודא שהנתיב קיים, אם לא - תדפיס לשגיאה
+    if not os.path.exists(initial_path):
+        with open("error_log.txt", "w") as f:
+            f.write(f"CRITICAL ERROR: Path not found {initial_path}")
+        sys.exit(1)
+
     file_url = "file:///" + os.path.abspath(initial_path).replace("\\", "/")
 
-    # 6. בדיקת סביבה: האם מורץ במובייל (Kivy) או בדסקטופ (pywebview)
-    if "ANDROID_ARGUMENT" in os.environ:
-        # סביבת Android (Kivy WebView)
-        try:
-            from kivy.app import App  # type: ignore
-            from kivy.uix.webview import WebView  # type: ignore
-        except ImportError:
-            sys.exit(1)
+    # 6. הרצה כ-Desktop בלבד (ללא Mobile Bridge)
+    window_title = f"ExtraTag - {selected_folder.replace('Extratag - ', '')}"
+    
+    window = webview.create_window(
+        title=window_title,
+        url=file_url,
+        js_api=api,
+        width=900,
+        height=700,
+    )
 
-        class MobileApp(App):
-            def build(self):
-                # טעינת ה-HTML המקומי בתוך ה-APK
-                return WebView(url=file_url)
-
-        MobileApp().run()
-
-    else:
-        # סביבת Desktop (pywebview)
-        window_title = f"ExtraTag - {selected_folder.replace('Extratag - ', '')}"
-        window = webview.create_window(
-            title=window_title,
-            url=file_url,
-            js_api=api,
-            width=900,
-            height=700,
-        )
-
-        def setup_mobile_bridge():
-            js_bridge_code = """
-            (function() {
-                if (typeof window.pywebview === 'undefined') {
-                    window.pywebview = {
-                        api: new Proxy({}, {
-                            get: function(target, propKey) {
-                                return function(...args) {
-                                    return new Promise((resolve, reject) => {
-                                        const reqId = 'req_' + Math.random().toString(36).substr(2, 9);
-                                        window['res_' + reqId] = function(response) {
-                                            try {
-                                                resolve(typeof response === 'string' ? JSON.parse(response) : response);
-                                            } catch(e) {
-                                                resolve(response);
-                                            }
-                                            delete window['res_' + reqId];
-                                        };
-                                        if (window.AndroidBridge && window.AndroidBridge.postMessage) {
-                                            window.AndroidBridge.postMessage(JSON.stringify({ func: propKey, args: args, reqId: reqId }));
-                                        } else if (window.pywebview_api && window.pywebview_api.handle_mobile_request) {
-                                            window.pywebview_api.handle_mobile_request(JSON.stringify({ func: propKey, args: args, reqId: reqId }));
-                                        }
-                                    });
-                                };
-                            }
-                        })
-                    };
-                }
-            })();
-            """
-            try:
-                window.evaluate_js(js_bridge_code)
-            except Exception as e:
-                print(f"DEBUG: Bridge injection skipped or error: {e}")
-
-        webview.start(setup_mobile_bridge, debug=False)
+    # הרצה פשוטה ללא bridge של מובייל
+    webview.start(debug=False)
