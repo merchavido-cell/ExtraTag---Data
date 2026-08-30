@@ -55,5 +55,13 @@
         "avatarColor": "#f59e0b",
         "avatarShape": "circle",
         "avatarTextColor": "black"
+    },
+    {
+        "firstName": "michel",
+        "lastName": "rogani",
+        "email": "Kelsia.Storrs@VertexInbox.com",
+        "password": "michel1096",
+        "confirmPassword": "michel1096",
+        "id": "37e8a35e-fcc9-495d-8c30-46a7d4865133"
     }
 ]
