@@ -62,6 +62,10 @@
         "email": "Kelsia.Storrs@VertexInbox.com",
         "password": "michel1096",
         "confirmPassword": "michel1096",
-        "id": "37e8a35e-fcc9-495d-8c30-46a7d4865133"
+        "id": "37e8a35e-fcc9-495d-8c30-46a7d4865133",
+        "exmail": "michelrogani16@extra-tag.com",
+        "expass": "P@ssword123!",
+        "custom_username": "michelrogani16",
+        "files": []
     }
 ]
