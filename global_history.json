@@ -51,9 +51,16 @@
         "exmail": "eyal-pro@extra-tag.com",
         "expass": "P@ssword123!",
         "custom_username": "eyal-pro",
-        "files": [],
+        "files": [
+            {
+                "file_name": "מסיימי כיתה ז2 מדעית  2026.pdf",
+                "file_size": 28,
+                "file_data": "data:application/pdf;base64,"
+            }
+        ],
         "avatarColor": "#f59e0b",
         "avatarShape": "circle",
-        "avatarTextColor": "black"
+        "avatarTextColor": "black",
+        "language": "en"
     }
 ]
