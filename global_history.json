@@ -95,8 +95,10 @@
         "avatarColor": "#f59e0b",
         "avatarShape": "circle",
         "avatarTextColor": null,
-        "custom_username": null,
-        "exmail": null,
-        "language": "en"
+        "custom_username": "eyal.pro",
+        "exmail": "eyal.pro@extra-tag.com",
+        "language": "en",
+        "expass": "P@ssword123!",
+        "files": []
     }
 ]
