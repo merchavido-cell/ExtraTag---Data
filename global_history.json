@@ -6,11 +6,11 @@
         "password": "123",
         "confirmPassword": "123",
         "id": "473ca404-f596-4075-b2d2-b534ca9c5372",
-        "exmail": "merchavido@extra-tag.com",
+        "exmail": null,
         "expass": "P@ssword123!",
-        "custom_username": "merchavido",
-        "avatarColor": "#38bdf8",
-        "avatarShape": "circle",
+        "custom_username": null,
+        "avatarColor": null,
+        "avatarShape": null,
         "avatarTextColor": "black",
         "files": [
             {
