@@ -84,5 +84,13 @@
                 "lastEntered": "2026-09-05T20:48:16"
             }
         ]
+    },
+    {
+        "firstName": "eyal",
+        "lastName": "merchav",
+        "email": "eyal.merchav@gmail.com",
+        "password": "1967eyal",
+        "confirmPassword": "1967eyal",
+        "id": "707b464a-43bc-4756-a5b5-66842ba2f1b5"
     }
 ]
