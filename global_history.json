@@ -94,7 +94,7 @@
         "id": "707b464a-43bc-4756-a5b5-66842ba2f1b5",
         "avatarColor": "#f59e0b",
         "avatarShape": "circle",
-        "avatarTextColor": null,
+        "avatarTextColor": "black",
         "custom_username": "eyal.pro",
         "exmail": "eyal.pro@extra-tag.com",
         "language": "en",
