@@ -70,8 +70,6 @@
                 "lastEntered": "2026-08-30T22:38:16"
             }
         ],
-        "is_logged_in": false,
-        "is_selected": false,
         "sent_emails": [
             {
                 "to": "merchavido@gmail.com",
@@ -95,8 +93,6 @@
         "password": "123",
         "confirmPassword": "123",
         "id": "473ca404-f596-4075-b2d2-b534ca9c5372",
-        "is_logged_in": true,
-        "is_selected": true,
         "avatarColor": null,
         "avatarShape": null,
         "avatarTextColor": "black",
