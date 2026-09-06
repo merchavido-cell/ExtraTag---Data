@@ -56,6 +56,13 @@
         "language": "en",
         "class_history": [
             {
+                "id": "cbs6mcd",
+                "name": "math_class",
+                "code": "VIB2122E",
+                "membersCount": 1,
+                "lastEntered": "2026-09-06T10:31:13"
+            },
+            {
                 "id": "8otvv5v",
                 "name": "try_class",
                 "code": "8A7TU11T",
