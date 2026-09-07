@@ -24,8 +24,8 @@
         ]
     },
     {
-        "firstName": "ido_TEST",
-        "lastName": "merchav_TEST",
+        "firstName": "ido",
+        "lastName": "merchav",
         "email": "merchavido@gmail.com",
         "password": "181Ido2013",
         "confirmPassword": "181Ido2013",
@@ -33,8 +33,8 @@
         "exmail": "merchavido@extra-tag.com",
         "expass": "P@ssword123!",
         "custom_username": "merchavido",
-        "avatarColor": "#ff0000",
-        "avatarShape": "square",
+        "avatarColor": "#38bdf8",
+        "avatarShape": "circle",
         "avatarTextColor": "white",
         "files": [
             {
