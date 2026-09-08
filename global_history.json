@@ -26,12 +26,12 @@
         "is_selected": false
     },
     {
-        "firstName": "Michel",
-        "lastName": "Yakob",
+        "firstName": "ido",
+        "lastName": "merchav",
         "email": "merchavido@gmail.com",
         "password": "123",
         "confirmPassword": "181Ido2013",
-        "id": "030146bb-c3a1-4073-9b12-8aab975b5bec",
+        "id": "030146bb-c3a1-4073-9b12-295ea12uw7",
         "exmail": "merchavido@extra-tag.com",
         "expass": "P@ssword123!",
         "custom_username": "merchavido",
@@ -91,9 +91,8 @@
                     }
                 ]
             }
-        ],
-        "is_logged_in": false,
-        "is_selected": false
+        ]
+        
     },
     {
         "firstName": "try",
@@ -125,8 +124,7 @@
         "firstName": "Michel",
         "lastName": "Yakob",
         "email": "merchavido@gmail.com",
-        "password": "123",
-        "is_logged_in": true,
-        "is_selected": true
+        "password": "123"
+        
     }
 ]
