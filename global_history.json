@@ -21,9 +21,7 @@
                 "membersCount": 2,
                 "lastEntered": "2026-09-05T21:08:00"
             }
-        ],
-        "is_logged_in": false,
-        "is_selected": false
+        ]
     },
     {
         "firstName": "ido",
@@ -115,9 +113,8 @@
                 "membersCount": 1,
                 "lastEntered": "2026-09-05T20:48:16"
             }
-        ],
-        "is_logged_in": false,
-        "is_selected": false
+        ]
+       
     },
     {
         "id": "030146bb-c3a1-4073-9b12-8aab975b5bec",
