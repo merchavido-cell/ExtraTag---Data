@@ -90,7 +90,6 @@
                 ]
             }
         ]
-        
     },
     {
         "firstName": "try",
@@ -114,7 +113,6 @@
                 "lastEntered": "2026-09-05T20:48:16"
             }
         ]
-       
     },
     {
         "id": "030146bb-c3a1-4073-9b12-8aab975b5bec",
@@ -122,6 +120,5 @@
         "lastName": "Yakob",
         "email": "merchavido@outlook.co.il",
         "password": "123"
-        
     }
 ]
