@@ -14,13 +14,7 @@
         "language": "en",
         "expass": "P@ssword123!",
         "class_history": [
-            {
-                "id": "8otvv5v",
-                "name": "try_class",
-                "code": "8A7TU11T",
-                "membersCount": 2,
-                "lastEntered": "2026-09-05T21:08:00"
-            }
+            
         ]
     },
     {
@@ -60,20 +54,6 @@
         ],
         "language": "en",
         "class_history": [
-            {
-                "id": "cbs6mcd",
-                "name": "math_class",
-                "code": "VIB2122E",
-                "membersCount": 2,
-                "lastEntered": "2026-09-07T10:56:57"
-            },
-            {
-                "id": "8otvv5v",
-                "name": "try_class",
-                "code": "8A7TU11T",
-                "membersCount": 1,
-                "lastEntered": "2026-08-31T21:14:48"
-            }
         ],
         "sent_emails": [
             {
@@ -105,13 +85,7 @@
         "exmail": null,
         "language": "en",
         "class_history": [
-            {
-                "id": "8uyeb2v",
-                "name": "new",
-                "code": "X98EG3V9",
-                "membersCount": 1,
-                "lastEntered": "2026-09-05T20:48:16"
-            }
+            
         ]
     },
     {
