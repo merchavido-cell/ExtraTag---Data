@@ -13,9 +13,7 @@
         "exmail": "eyal.pro@extra-tag.com",
         "language": "en",
         "expass": "P@ssword123!",
-        "class_history": [
-            
-        ]
+        "class_history": []
     },
     {
         "firstName": "ido",
@@ -28,7 +26,7 @@
         "expass": "P@ssword123!",
         "custom_username": "merchavido",
         "avatarColor": "#38bdf8",
-        "avatarShape": "circle",
+        "avatarShape": "square",
         "avatarTextColor": "black",
         "files": [
             {
@@ -53,8 +51,7 @@
             }
         ],
         "language": "en",
-        "class_history": [
-        ],
+        "class_history": [],
         "sent_emails": [
             {
                 "to": "merchavido@gmail.com",
@@ -84,9 +81,7 @@
         "custom_username": null,
         "exmail": null,
         "language": "en",
-        "class_history": [
-            
-        ]
+        "class_history": []
     },
     {
         "id": "030146bb-c3a1-4073-9b12-8aab975b5bec",
