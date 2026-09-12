@@ -51,7 +51,22 @@
             }
         ],
         "language": "en",
-        "class_history": [],
+        "class_history": [
+            {
+                "id": "hbeg7al",
+                "name": "merchav",
+                "code": "DGE317X2",
+                "membersCount": 2,
+                "lastEntered": "2026-09-12T16:03:39"
+            },
+            {
+                "id": "9q6zdc6",
+                "name": "math_class",
+                "code": "B5IV723T",
+                "membersCount": 1,
+                "lastEntered": "2026-09-11T14:16:51"
+            }
+        ],
         "sent_emails": [
             {
                 "to": "merchavido@gmail.com",
