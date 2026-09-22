@@ -81,7 +81,7 @@
         "id": "491ed971-9909-43fb-9999-61682bb53c43",
         "avatarColor": "#f59e0b",
         "avatarShape": "circle",
-        "avatarTextColor": null,
+        "avatarTextColor": "black",
         "custom_username": null,
         "exmail": null,
         "language": "en",
