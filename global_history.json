@@ -98,6 +98,15 @@
         "custom_username": null,
         "exmail": null,
         "language": "en",
-        "files": []
+        "files": [],
+        "class_history": [
+            {
+                "id": "hbeg7al",
+                "name": "merchav",
+                "code": "DGE317X2",
+                "membersCount": 2,
+                "lastEntered": "2026-09-23T10:00:44"
+            }
+        ]
     }
 ]
