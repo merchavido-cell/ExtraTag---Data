@@ -66,7 +66,7 @@
                 "name": "merchav",
                 "code": "DGE317X2",
                 "membersCount": 1,
-                "lastEntered": "2026-09-22T22:58:16"
+                "lastEntered": "2026-09-23T10:01:48"
             }
         ],
         "sent_emails": [
@@ -98,21 +98,6 @@
         "custom_username": null,
         "exmail": null,
         "language": "en",
-        "files": [
-            {
-                "file_name": "homework2.java",
-                "file_size": 3241,
-                "file_data": "data:application/octet-stream;base64,Ly9wcm9ncmFtOiBuYW1lIGlkbyBtZXJjaGF2DQovL2ltcG9ydCB0aGUgc2Nhbm5lcjoNCmltcG9ydCBqYXZhLnV0aWwuU2Nhbm5lcjsNCg0KcHVibGljIGNsYXNzIGhvbWV3b3JrMnsNCg0KcHVibGljIHN0YXRpYyB2b2lkIG1haW4oU3RyaW5nW10gYXJncykgew0KICAgIA0KDQogICAgU3lzdGVtLm91dC5wcmludGxuKCJteSBiZXN0IGFuaW1hbCBpcyBsaW9uIik7DQogICAgU3lzdGVtLm91dC5wcmludGxuKCJpbSBhbSBpZG8gbWVyY2hhdlxuYW5kIGkgbGl2ZSBpbiByYSdhbmFuYVxud3JpdGUgc2luZ2xlIGRpZ2h0IG51bWJlciIpOw0KDQogICAgU2Nhbm5lciBpbnB1dD1uZXcgU2Nhbm5lcihTeXN0ZW0uaW4pOw0KDQoNCi8vYWZ0ZXIgd2Ugb3BlbiB0aGUgc2Nhbm5lcjoNCiAgICBpbnQgRmlyc3RVc2VyTnVtYmVyPWlucHV0Lm5leHRJbnQoKTsNCiAgICBTeXN0ZW0ub3V0LnByaW50bG4oInlvdXIgbnVtYmVyLTEgaXM6IiArIChGaXJzdFVzZXJOdW1iZXItMSkpOw0KICAgIFN5c3RlbS5vdXQucHJpbnRsbigieW91ciBudW1iZXIgaXM6IiArIChGaXJzdFVzZXJOdW1iZXIpKTsNCiAgICBTeXN0ZW0ub3V0LnByaW50bG4oInlvdXIgbnVtYmVyKzEgaXM6IiArIChGaXJzdFVzZXJOdW1iZXIrMSkpOw0KDQoNCg0KICAgIC8vZXhjZXJzaXplIDQ6DQoNCiAgICBTeXN0ZW0ub3V0LnByaW50bG4oIndyaXRlIG51bWJlciB3aXRoIDMgZGlnaHRzOiIpOw0KICAgIGludCBTZWNvbmRVc2VyTnVtYmVyID0gaW5wdXQubmV4dEludCgpOw0KICAgIGludCBzdW1taW5nID0gKFNlY29uZFVzZXJOdW1iZXIlMTApKygoU2Vjb25kVXNlck51bWJlci8xMCklMTApKyhTZWNvbmRVc2VyTnVtYmVyLzEwMCk7DQogICAgU3lzdGVtLm91dC5wcmludGxuKCJ0aGUgc3VtIGlzICIgKyBzdW1taW5nKTsNCg0KDQogICAgLy9leGNlcnNpemUgNToNCg0KDQogICAgU3lzdGVtLm91dC5wcmludGxuKCJob3cgb2xkIGFyZSB5b3U/Iik7DQogICAgaW50IEJvcm5OZXh0TnVtYmVyID0gIGlucHV0Lm5leHRJbnQoKTsNCiAgICBpbnQgZGF5c0xpdmU9Qm9ybk5leHROdW1iZXIqMzY1Ow0KICAgIGludCBob3Vyc0xpdmUgPSBkYXlzTGl2ZSoyNDsNCiAgICBTeXN0ZW0ub3V0LnByaW50bG4oInlvdSBsaXZpbmcgYXQgZGF5czogIisgZGF5c0xpdmUgKyAiYW5kIGF0IGhvdXJzIHlvdSBsaXZlaW5nOiAiKyBob3Vyc0xpdmUpOw0KDQogICAgLy9leGNyc2l6ZSA2Og0KDQogICAgU3lzdGVtLm91dC5wcmludGxuKCJob3cgbXVjaCBob3VycyBhdCB0aGUgZGF5IHlvdSB3b3JrPyIpOw0KICAgIGludCBXb3JrSG91cnNBdERheT1pbnB1dC5uZXh0SW50KCk7DQoNCiAgICBTeXN0ZW0ub3V0LnByaW50bG4oImhvdyBtdWNoIGhvdXJzIGF0IHRoZSBuaWdodCB5b3Ugd29yaz8iKTsNCiAgICBkb3VibGUgV29ya0hvdXJzQXROaWdodD1pbnB1dC5uZXh0SW50KCk7DQoNCg0KICAgIC8vcmVzdWx0IG9mIGV4Y2Vyc2l6ZSA2Og0KDQogICAgU3lzdGVtLm91dC5wcmludGxuKCJ5b3UgbmVlZCB0byBnZXQgIisoV29ya0hvdXJzQXREYXkqMTgpICsgImFuZCBmb3IgdGhlIG5pZ2h0OiAiKyAoKFdvcmtIb3Vyc0F0TmlnaHQqMjcuNSkpKTsNCg0KDQoNCiAgICAvL2V4Y2Vyc2l6ZSA3Og0KICAgIFN5c3RlbS5vdXQucHJpbnRsbigid2hhdCBpcyB5b3VyIHNjb3JlIGF0IG1hdGg/Iik7DQogICAgaW50IFNjb3JlQXRNYXRoPWlucHV0Lm5leHRJbnQoKTsNCiAgICBTeXN0ZW0ub3V0LnByaW50bG4oIndoYXQgaXMgeW91ciBzY29yZSBhdCBlbmdsaXNoPyIpOw0KICAgIGludCBTY29yZUF0RW5nbGlzaD1pbnB1dC5uZXh0SW50KCk7DQogICAgU3lzdGVtLm91dC5wcmludGxuKCJ3aGF0IGlzIHlvdXIgc2NvcmUgYXQgc2NpZW5jZT8iKTsNCiAgICBpbnQgU2NvcmVBdFNjaWVuY2U9aW5wdXQubmV4dEludCgpOw0KICAgIFN5c3RlbS5vdXQucHJpbnRsbigid2hhdCBpcyB5b3VyIHNjb3JlIGF0IHNwb3J0PyIpOw0KICAgIGludCBTY29yZUF0U1BvcnQ9aW5wdXQubmV4dEludCgpOw0KICAgIGludCBBdmVyYW5nZSA9IChTY29yZUF0TWF0aCtTY29yZUF0RW5nbGlzaCtTY29yZUF0U2NpZW5jZStTY29yZUF0U1BvcnQpLzQ7DQogICAgU3lzdGVtLm91dC5wcmludGxuKCJ0aGUgYXZlcmFuZ2UgaXM6ICIrQXZlcmFuZ2UpOw0KDQoNCg0KICAgIC8vZXhjcmVzaXplIDg6DQogICAgU3lzdGVtLm91dC5wcmludGxuKCJ3cml0ZSB0d28gbnVtYmVycyIpOw0KICAgIGludCBhPWlucHV0Lm5leHRJbnQoKTsNCiAgICBpbnQgYj1pbnB1dC5uZXh0SW50KCk7DQogICAgaW50IGM7DQogICAgYz1hOw0KICAgIGE9YjsNCiAgICBiPWM7DQogICAgU3lzdGVtLm91dC5wcmludGxuKCJhOiAiICsgYSArICIgYjogIitiKTsNCg0KDQoNCi8vZW5kIG9mIHRoZSBwcm9ncmFtbQ0KDQoNCg0KaW5wdXQuY2xvc2UoKTsNCn19"
-            }
-        ],
-        "class_history": [
-            {
-                "id": "hbeg7al",
-                "name": "merchav",
-                "code": "DGE317X2",
-                "membersCount": 2,
-                "lastEntered": "2026-09-23T10:00:47"
-            }
-        ]
+        "files": []
     }
 ]
