@@ -145,9 +145,30 @@
         "avatarColor": "#f59e0b",
         "avatarShape": "circle",
         "avatarTextColor": "black",
-        "custom_username": null,
-        "exmail": null,
+        "custom_username": "eyal.merchav",
+        "exmail": "eyal.merchav@extra-tag.com",
         "language": "en",
-        "files": []
+        "files": [],
+        "sent_emails": [
+            {
+                "to": "eyal.merchav@gmail.com",
+                "subject": "ExtraTag Login Verification Code",
+                "body": "Hello,\n\nYour verification code for logging into ExtraTag is: 330860\n\nSent from calc@extra-tag.com.",
+                "date": "2026-09-23 09:58",
+                "has_attachments": false,
+                "attachments": []
+            }
+        ],
+        "class_history": [
+            {
+                "id": "hbeg7al",
+                "name": "merchav",
+                "code": "DGE317X2",
+                "membersCount": 2,
+                "lastEntered": "2026-09-23T10:00:47"
+            }
+        ],
+        "expass": "P@ssword123!",
+        "events": []
     }
 ]
