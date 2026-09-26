@@ -186,5 +186,13 @@
         ],
         "expass": "P@ssword123!",
         "events": []
+    },
+    {
+        "firstName": "beni",
+        "lastName": "golan",
+        "email": "merchavido@extra-tag.com",
+        "password": "123",
+        "confirmPassword": "123",
+        "id": "11a64e92-c4ab-4a74-be60-6c0c18ed1fff"
     }
 ]
