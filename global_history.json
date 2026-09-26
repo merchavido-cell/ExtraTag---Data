@@ -193,6 +193,14 @@
         "email": "merchavido@extra-tag.com",
         "password": "123",
         "confirmPassword": "123",
-        "id": "11a64e92-c4ab-4a74-be60-6c0c18ed1fff"
+        "id": "11a64e92-c4ab-4a74-be60-6c0c18ed1fff",
+        "avatarColor": "#f43f5e",
+        "avatarShape": "circle",
+        "avatarTextColor": "black",
+        "custom_username": null,
+        "exmail": null,
+        "language": "en",
+        "files": [],
+        "events": []
     }
 ]
