@@ -97,6 +97,11 @@
                 "file_name": "file1.py",
                 "file_size": 27,
                 "file_data": "data:text/x-python;base64,d2hpbGUgVHJ1ZToKIHByaW50KCJieWUiKQoK"
+            },
+            {
+                "file_name": "test1.py",
+                "file_size": 14,
+                "file_data": "data:text/x-python;base64,cHJpbnQoImhlbGxvIik="
             }
         ],
         "language": "en",
