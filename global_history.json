@@ -236,22 +236,5 @@
         ],
         "expass": "P@ssword123!",
         "events": []
-    },
-    {
-        "id": "6d8ef65b-6785-4c57-b1b2-7c970b9d5d5b",
-        "firstName": "Roy",
-        "lastName": "golan",
-        "email": "weyehiy931@hiringview.com",
-        "password": "123",
-        "custom_username": "roygolan012",
-        "exmail": null,
-        "expass": null,
-        "avatarColor": "#38bdf8",
-        "avatarShape": "circle",
-        "avatarTextColor": "#ffffff",
-        "language": "en",
-        "class_history": [],
-        "events": [],
-        "files": []
     }
 ]
