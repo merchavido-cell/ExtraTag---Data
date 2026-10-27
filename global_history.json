@@ -236,22 +236,5 @@
         ],
         "expass": "P@ssword123!",
         "events": []
-    },
-    {
-        "id": "ac20c598-0a3b-4d0f-b336-194cfdd36c31",
-        "firstName": "Roy",
-        "lastName": "ben david",
-        "email": "fosevo1668@agaexpress.com",
-        "password": "123456789123",
-        "custom_username": "roybdavid09",
-        "exmail": null,
-        "expass": null,
-        "avatarColor": "#38bdf8",
-        "avatarShape": "circle",
-        "avatarTextColor": "#ffffff",
-        "language": "en",
-        "class_history": [],
-        "events": [],
-        "files": []
     }
 ]
