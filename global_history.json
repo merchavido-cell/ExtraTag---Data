@@ -236,23 +236,5 @@
         ],
         "expass": "P@ssword123!",
         "events": []
-    },
-    {
-        "id": "d7ace2fd-49d7-45ee-a79d-792e16a37793",
-        "firstName": "galy",
-        "lastName": "dol",
-        "email": "weyehiy931@hiringview.com",
-        "password": "123",
-        "confirmPassword": "123",
-        "custom_username": "galy-dor",
-        "exmail": null,
-        "expass": null,
-        "avatarColor": "#38bdf8",
-        "avatarShape": "circle",
-        "avatarTextColor": "rgb(255, 255, 255)",
-        "language": "en",
-        "class_history": [],
-        "events": [],
-        "files": []
     }
 ]
