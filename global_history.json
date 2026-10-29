@@ -249,7 +249,7 @@
         "expass": null,
         "avatarColor": "#38bdf8",
         "avatarShape": "circle",
-        "avatarTextColor": "#ffffff",
+        "avatarTextColor": "rgb(255, 255, 255)",
         "language": "en",
         "class_history": [],
         "events": [],
