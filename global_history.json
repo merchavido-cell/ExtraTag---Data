@@ -241,5 +241,13 @@
         ],
         "expass": "P@ssword123!",
         "events": []
+    },
+    {
+        "firstName": "Ariel",
+        "lastName": "Wallach",
+        "email": "ariel.wallach@gmail.com",
+        "password": "a123",
+        "confirmPassword": "a123",
+        "id": "18e7a674-5017-4ba4-97a0-57c66e98fc18"
     }
 ]
