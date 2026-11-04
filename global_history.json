@@ -248,6 +248,15 @@
         "email": "ariel.wallach@gmail.com",
         "password": "a123",
         "confirmPassword": "a123",
-        "id": "18e7a674-5017-4ba4-97a0-57c66e98fc18"
+        "id": "18e7a674-5017-4ba4-97a0-57c66e98fc18",
+        "exmail": "arielwallach@extra-tag.com",
+        "expass": "P@ssword123!",
+        "custom_username": "arielwallach",
+        "files": [],
+        "events": [],
+        "avatarColor": null,
+        "avatarShape": null,
+        "avatarTextColor": "black",
+        "language": "en"
     }
 ]
