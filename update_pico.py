@@ -4,43 +4,25 @@ import json
 with open("global_history.json", "r", encoding="utf-8") as f:
     global_data = json.load(f)
 
-# חיפוש הפרופיל שלך (לדוגמה לפי האימייל שלך או לפי מזהה)
-target_profile = None
+light_profiles = []
 
-# אם הנתונים הם רשימה של פרופילים:
+# מעבר על כל הפרופילים וניקוי שדות ה-files הכבדים בלבד
 if isinstance(global_data, list):
     for p in global_data:
-        # שנה כאן את האימייל למייל האמיתי שלך במסד הנתונים
-        if p.get("email") == "merchavido@gmail.com":
-            target_profile = {
-                "id": p.get("id"),
-                "email": p.get("email"),
-                "exmail": p.get("exmail"),
-                "password": p.get("password"),
-                "firstName": p.get("firstName"),
-                "lastName": p.get("lastName"),
-                "events": p.get("events", [])
-                # שדה ה-files מושמט לחלוטין!
-            }
-            break
+        light_profile = {
+            "id": p.get("id"),
+            "email": p.get("email"),
+            "exmail": p.get("exmail"),
+            "password": p.get("password"),
+            "firstName": p.get("firstName"),
+            "lastName": p.get("lastName"),
+            "events": p.get("events", [])
+            # שדה ה-files מוסר לחלוטין מכל פרופיל כדי לחסוך ענק בזיכרון!
+        }
+        light_profiles.append(light_profile)
 
-# אם לא נמצא ספציפי, ניקח ברירת מחדל את הפרופיל הראשון לצורך בדיקה
-if not target_profile and isinstance(global_data, list) and len(global_data) > 0:
-    p = global_data[0]
-    target_profile = {
-        "id": p.get("id"),
-        "email": p.get("email"),
-        "exmail": p.get("exmail"),
-        "password": p.get("password"),
-        "firstName": p.get("firstName"),
-        "lastName": p.get("lastName"),
-        "events": p.get("events", [])
-    }
+# שמירת הקובץ המצומצם שיועבר למכשיר
+with open("local_history.json", "w", encoding="utf-8") as f:
+    json.dump(light_profiles, f, ensure_ascii=False, indent=2)
 
-# שמירת הקובץ המצומצם local_history.json
-if target_profile:
-    with open("local_history.json", "w", encoding="utf-8") as f:
-        json.dump(target_profile, f, ensure_ascii=False, indent=2)
-    print("Successfully generated local_history.json without files!")
-else:
-    print("Error: Target profile not found.")
+print("Successfully stripped files and updated local_history.json!")
