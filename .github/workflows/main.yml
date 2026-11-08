@@ -1,9 +1,12 @@
-name: Update Local History for Pico
+name: Update Local History every 5 minutes
 
 on:
   push:
     paths:
       - 'global_history.json'
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,5 +28,5 @@ jobs:
           git config --global user.name "Pico Cloud Bot"
           git config --global user.email "bot@users.noreply.github.com"
           git add local_history.json
-          git commit -m "Auto-update local_history.json via Action" || exit 0
+          git commit -m "Auto-update local_history.json every 5 minutes" || exit 0
           git push
