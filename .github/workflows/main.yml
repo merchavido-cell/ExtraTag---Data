@@ -1,0 +1,29 @@
+name: Update Local History for Pico
+
+on:
+  push:
+    paths:
+      - 'global_history.json'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Run filtering script
+        run: python update_pico.py
+
+      - name: Commit and push local_history.json
+        run: |
+          git config --global user.name "Pico Cloud Bot"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add local_history.json
+          git commit -m "Auto-update local_history.json via Action" || exit 0
+          git push
