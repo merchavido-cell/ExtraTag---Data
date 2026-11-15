@@ -218,21 +218,5 @@
                 "updated_at": "2026-11-12T18:28:14"
             }
         ]
-    },
-    {
-        "firstName": "eyal",
-        "lastName": "merchav",
-        "email": "eyal.merchav@gmail.com",
-        "password": "1967eyal",
-        "confirmPassword": "1967eyal",
-        "id": "de315dbc-29a3-4379-afd9-a32ec05276c0",
-        "avatarColor": "#f59e0b",
-        "avatarShape": "circle",
-        "avatarTextColor": null,
-        "custom_username": null,
-        "exmail": null,
-        "language": "en",
-        "files": [],
-        "events": []
     }
 ]
