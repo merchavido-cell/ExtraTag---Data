@@ -33,16 +33,16 @@
         "desc": "",
         "created_at": "2026-11-12T18:28:14",
         "updated_at": "2026-11-12T18:28:14"
+      },
+      {
+        "id": "6be9e6fc-7e27-4b8f-b053-2c1fafd4beed",
+        "title": "bla",
+        "date": "2026-11-26",
+        "time": "",
+        "desc": "",
+        "created_at": "2026-11-15T16:42:10",
+        "updated_at": "2026-11-15T16:42:10"
       }
     ]
-  },
-  {
-    "id": "5a565634-524d-495c-bf79-6d430e9f0762",
-    "email": "eyal.merchav@gmail.com",
-    "exmail": null,
-    "password": "1967eyal",
-    "firstName": "eyal",
-    "lastName": "merchav",
-    "events": []
   }
 ]
