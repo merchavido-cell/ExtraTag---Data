@@ -216,16 +216,23 @@
                 "desc": "",
                 "created_at": "2026-11-12T18:28:14",
                 "updated_at": "2026-11-12T18:28:14"
-            },
-            {
-                "id": "6be9e6fc-7e27-4b8f-b053-2c1fafd4beed",
-                "title": "bla",
-                "date": "2026-11-26",
-                "time": "",
-                "desc": "",
-                "created_at": "2026-11-15T16:42:10",
-                "updated_at": "2026-11-15T16:42:10"
             }
         ]
+    },
+    {
+        "firstName": "eyal",
+        "lastName": "merchav",
+        "email": "eyal.merchav@gmail.com",
+        "password": "1967eyal",
+        "confirmPassword": "1967eyal",
+        "id": "5a565634-524d-495c-bf79-6d430e9f0762",
+        "avatarColor": "#f59e0b",
+        "avatarShape": "circle",
+        "avatarTextColor": null,
+        "custom_username": null,
+        "exmail": null,
+        "language": "en",
+        "files": [],
+        "events": []
     }
 ]
