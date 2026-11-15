@@ -218,5 +218,13 @@
                 "updated_at": "2026-11-12T18:28:14"
             }
         ]
+    },
+    {
+        "firstName": "eyal",
+        "lastName": "merchav",
+        "email": "eyal.merchav@gmail.com",
+        "password": "1967eyal",
+        "confirmPassword": "1967eyal",
+        "id": "5a565634-524d-495c-bf79-6d430e9f0762"
     }
 ]
